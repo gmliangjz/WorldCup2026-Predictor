@@ -1,0 +1,43 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Node (if a build step is ever added)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+.pnpm-debug.log*
+
+# Build output
+dist/
+build/
+.cache/
+
+# Env / secrets
+.env
+.env.local
+.env.*.local
+
+# Local audio (NOT bundled — copyright). Users drop their own tracks into assets/.
+assets/*.mp3
+assets/*.wav
+assets/*.m4a
+assets/*.ogg
+
+# Temporary verification artefacts
+check_*.js
+verify_*.js
+test_*.js
+*.tmp
+
+# Backups
+*.backup-*
+*~

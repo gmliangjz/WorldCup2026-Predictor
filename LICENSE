@@ -1,0 +1,41 @@
+MIT License
+
+Copyright (c) 2026 jizhengliang
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+Third-party attribution notes (not covered by this MIT license):
+
+  * Player photos served from Wikipedia REST API are licensed under their
+    respective Wikipedia licenses (CC BY-SA / public domain / etc.). They are
+    fetched at runtime via the public API and are NOT bundled with this
+    repository.
+
+  * Country flag images are served from FlagCDN (CC0). They are fetched at
+    runtime and not bundled.
+
+  * Champion taglines included in this software are original tributes to the
+    Chinese sports-broadcasting tradition. They are NOT quotations of any
+    specific commentator's work and any resemblance to existing commentary is
+    coincidental or in the realm of common classical-Chinese phrasing.
+
+  * Player roster data reflects 2024-2025 national-team squad snapshots
+    compiled from public information.
