@@ -66,6 +66,7 @@ A single-file HTML simulator for the 2026 FIFA World Cup. Predict from the group
 - **Light / dark theme**: follows the system or toggles manually
 - **localStorage autosave**: close the browser, your prediction stays
 - **Responsive**: mobile / 1080p / desktop breakpoints
+- **Live scoring vs real results**: now that the cup is underway, the app pulls real scores from ESPN's public JSON feed (no key, fetched client-side) and grades your bracket in real time
 - **Core engine runs offline**: the simulation is pure front-end with no backend; the poster/confetti use 2 CDNs (html2canvas / canvas-confetti), and photos/flags are fetched at runtime (Wikipedia / FlagCDN)
 
 ### 🚀 Quick Start
@@ -117,9 +118,9 @@ Tier 1: Haiti / Curaçao / Cape Verde
 
 > ⚠️ FIFA reordered the 2026 tie-breakers, moving head-to-head ahead of overall goal difference — the key change from 2022.
 
-### 📊 Scoring (activates post-tournament)
+### 📊 Scoring (live during the tournament)
 
-This isn't just for fun — once the 2026 results are in, your bracket is scored automatically against reality:
+This isn't just for fun — real results stream in from ESPN's public feed and your bracket is scored against reality as the cup unfolds:
 
 | Correct call | Points |
 |---|---|
@@ -133,7 +134,7 @@ This isn't just for fun — once the 2026 results are in, your bracket is scored
 | Correct runner-up | 20 |
 | **Correct champion** | **30** |
 
-> The scoring logic (`SCORE_RULES` + `scorePrediction()`) is implemented and unit-tested; it stays dormant until real results are wired in (`ACTUAL_RESULTS.ready=false`), so nothing is scored before kickoff.
+> Real results are fetched client-side from ESPN's public scoreboard API (no key, CORS-open) into `ACTUAL_RESULTS`, then `scorePrediction()` grades your bracket — group matches slot-by-slot, knockout rounds by which teams actually advanced. Scores update every time you open the page.
 
 ### 📝 Champion Taglines (Original Tribute)
 
@@ -157,9 +158,9 @@ Each champion tier triggers an original Chinese commentary-style tagline, with a
 - [x] Bilingual + light/dark themes
 - [x] Shareable prediction URL (friends scan to see yours)
 - [x] Prediction history (last 5)
+- [x] Live result scoring via ESPN's public API (shipped on matchday 2)
 - [ ] Pre-tournament squad refresh (2026)
 - [ ] PWA support (add to home screen)
-- [ ] Live results API (post-kickoff 2026)
 
 ### 🙏 Credits
 
@@ -196,6 +197,7 @@ MIT — see [LICENSE](LICENSE). Third-party assets (flags, photos, taglines): [N
 - **浅色 / 深色主题**：跟随系统或手动切换
 - **localStorage 自动存档**：关闭浏览器不丢预测
 - **响应式适配**：移动端 / 1080p / 桌面三段断点
+- **真实赛果实时计分**：开赛后自动拉取真实比分（ESPN 公开 JSON 接口，免 key、纯前端 fetch），实时给你的预测打分
 - **核心引擎可离线**：模拟逻辑纯前端、无后端；海报与庆祝用 2 个 CDN（html2canvas / canvas-confetti），球员头像与国旗在运行时走外部资源（Wikipedia / FlagCDN）
 
 ### 🚀 快速开始
@@ -247,9 +249,9 @@ python -m http.server 8000   # 或：npx serve
 
 > ⚠️ FIFA 在 2026 改了 tie-breaker 顺序，把 H2H 移到总净胜球之前。这是与 2022 规则的关键差异。
 
-### 📊 计分机制（赛后激活）
+### 📊 计分机制（赛中实时）
 
-预测不只是娱乐——2026 开赛后，把每场真实赛果填进去，你的预测会自动对照打分：
+预测不只是娱乐——真实比分从 ESPN 公开接口实时流入，你的预测随赛事推进自动对照打分：
 
 | 命中项 | 得分 |
 |---|---|
@@ -263,7 +265,7 @@ python -m http.server 8000   # 或：npx serve
 | 亚军命中 | 20 |
 | **冠军命中** | **30** |
 
-> 计分逻辑（`SCORE_RULES` + `scorePrediction()`）已写好并通过 mock 测试；真实赛果接入前（`ACTUAL_RESULTS.ready=false`）保持休眠，赛前不会给任何分数。
+> 真实赛果由前端直接从 ESPN 公开 scoreboard 接口拉取（免 key、CORS 开放）填入 `ACTUAL_RESULTS`，再由 `scorePrediction()` 打分——小组赛逐场对照，淘汰赛按实际晋级球队集合计算。每次打开页面自动刷新。
 
 ### 📝 五档冠军解说词（原创致敬）
 
@@ -287,9 +289,9 @@ python -m http.server 8000   # 或：npx serve
 - [x] 中英双语 + 浅/深主题
 - [x] 分享 URL 携带预测 state（朋友扫码看你的预测）
 - [x] 历史预测记录（保存最近 5 次）
+- [x] 接入真实赛果实时计分（ESPN 公开接口，开赛第 2 天上线）
 - [ ] 2026 临开赛球员名单更新
 - [ ] PWA 支持（加到主屏幕）
-- [ ] 接入真实赛果 API（2026 开赛后）
 
 ### 📄 License
 

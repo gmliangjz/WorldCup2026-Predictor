@@ -982,6 +982,98 @@ function scorePrediction(){
   if(ko["3RD"]&&AK["3RD"]&&ko["3RD"].w===AK["3RD"].w){total+=R.third;bd.third+=R.third;}
   return {total:total,breakdown:bd};
 }
+// ─── P2: LIVE RESULTS (ESPN public scoreboard API) ───
+// Fetched straight from the browser: no key, Access-Control-Allow-Origin:*, near-live.
+// Verified against the live 2026 feed on 2026-06-12. One GET returns all 104 matches.
+// Flow: cached copy paints instantly → network refresh re-renders → offline keeps cache.
+var RESULTS_API="https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=20260611-20260719&limit=200";
+// season.type codes observed per stage in the 2026 feed (72/16/8/4/2/1/1 matches).
+var ESPN_STAGE={13802:"GROUP",13801:"R",13800:"L",13799:"Q",13798:"S",13797:"3RD",13803:"FINAL"};
+// ESPN displayName → roster key: inverted TEAM_EN plus the spellings ESPN actually uses.
+// Built lazily on first parse — TEAM_EN is declared further down the script, so inverting
+// it at this point would silently iterate `undefined` and produce an aliases-only table.
+var EN2CN=null;
+function ensureEN2CN(){
+  if(EN2CN)return;
+  EN2CN={};
+  for(var cn in TEAM_EN)EN2CN[TEAM_EN[cn]]=cn;
+  EN2CN["Bosnia-Herzegovina"]="波黑";EN2CN["Bosnia and Herzegovina"]="波黑";
+  EN2CN["United States"]="美国";
+  EN2CN["Ivory Coast"]="科特迪瓦";
+  EN2CN["Congo DR"]="刚果金";
+  EN2CN["Czech Republic"]="捷克";EN2CN["Korea Republic"]="韩国";
+  EN2CN["Turkey"]="土耳其";EN2CN["Cabo Verde"]="佛得角";
+}
+var TEAM_GROUP={};(function(){for(var g in GD)for(var i=0;i<GD[g].length;i++)TEAM_GROUP[GD[g][i]]=g;})();
+var GROUP_PAIRS=[[0,1],[0,2],[0,3],[1,2],[1,3],[2,3]]; // must mirror initGM()'s fixture order
+// Parse an ESPN scoreboard payload into ACTUAL_RESULTS. Returns # of finished matches applied.
+function applyEspnResults(data){
+  if(!data||!data.events)return 0;
+  ensureEN2CN();
+  var fresh={ready:false,source:"ESPN",updatedAt:Date.now(),count:0,groups:{},knockout:{}};
+  var n=0,koEvents=[];
+  for(var e=0;e<data.events.length;e++){
+    var ev=data.events[e],c=ev.competitions&&ev.competitions[0];
+    if(!c||!c.status||!c.status.type||!c.status.type.completed)continue;
+    var home=null,away=null;
+    for(var k=0;k<(c.competitors||[]).length;k++){
+      if(c.competitors[k].homeAway==="home")home=c.competitors[k];else away=c.competitors[k];
+    }
+    if(!home||!away||!home.team||!away.team)continue;
+    var h=EN2CN[home.team.displayName],a=EN2CN[away.team.displayName];
+    if(!h||!a){if(window.console)console.warn("WC26 results: unmapped team name",home.team.displayName,"/",away.team.displayName);continue;}
+    var hs=parseInt(home.score,10),as=parseInt(away.score,10);
+    if(isNaN(hs)||isNaN(as))continue;
+    var stage=ESPN_STAGE[ev.season&&ev.season.type];
+    if(stage==="GROUP"){
+      var g=TEAM_GROUP[h];
+      if(!g||TEAM_GROUP[a]!==g){if(window.console)console.warn("WC26 results: teams not in one group",h,a);continue;}
+      var ts=GD[g],slot=-1,flip=false;
+      for(var p=0;p<GROUP_PAIRS.length;p++){
+        var t1=ts[GROUP_PAIRS[p][0]],t2=ts[GROUP_PAIRS[p][1]];
+        if(t1===h&&t2===a){slot=p;break;}
+        if(t1===a&&t2===h){slot=p;flip=true;break;}
+      }
+      if(slot<0)continue;
+      if(!fresh.groups[g])fresh.groups[g]=[];
+      // Orient to the app's fixture template so scorePrediction compares slot-by-slot.
+      fresh.groups[g][slot]=flip?{hs:as,as:hs}:{hs:hs,as:as};
+      n++;
+    }else if(stage){
+      // Knockout: ESPN sets competitor.winner (covers extra time + penalties).
+      var w=(home.winner===true)?h:((away.winner===true)?a:(hs>as?h:(as>hs?a:null)));
+      if(!w)continue;
+      koEvents.push({stage:stage,date:ev.date,w:w,l:(w===h)?a:h,h:h,a:a,hs:hs,as:as});
+    }
+  }
+  // Assign knockout ids per stage in kickoff order. Scoring only needs the round prefix
+  // (teamsAdvanced builds a winner SET) plus exact FINAL / 3RD, so order within a round is free.
+  koEvents.sort(function(x,y){return x.date<y.date?-1:(x.date>y.date?1:0);});
+  var seq={R:0,L:0,Q:0,S:0};
+  for(var q=0;q<koEvents.length;q++){
+    var m=koEvents[q],id=(m.stage==="FINAL"||m.stage==="3RD")?m.stage:m.stage+(++seq[m.stage]);
+    fresh.knockout[id]={w:m.w,l:m.l,h:m.hs,a:m.as};
+    n++;
+  }
+  fresh.count=n;fresh.ready=n>0;
+  // Never let an unexpectedly empty payload clobber a good cached copy.
+  if(n>0||!ACTUAL_RESULTS.ready)ACTUAL_RESULTS=fresh;
+  return n;
+}
+function cacheActualResults(){try{localStorage.setItem("wc26_actual",JSON.stringify(ACTUAL_RESULTS));}catch(e){}}
+function loadCachedActualResults(){
+  try{var c=JSON.parse(localStorage.getItem("wc26_actual")||"null");if(c&&c.ready){ACTUAL_RESULTS=c;return true;}}catch(e){}
+  return false;
+}
+function fetchActualResults(){
+  if(Date.now()<Date.parse("2026-06-11T00:00:00Z"))return; // nothing to score before kickoff
+  loadCachedActualResults(); // paint from cache immediately; network refresh follows
+  if(typeof fetch!=="function")return;
+  fetch(RESULTS_API).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json();}).then(function(j){
+    var n=applyEspnResults(j);
+    if(n>0){cacheActualResults();render();}
+  }).catch(function(e){/* offline or API moved — cached copy (if any) is already applied */});
+}
 function rBaseline(el){
   var stageLbl=(LANG==="en")
     ?{R32:"R32",R16:"R16",QF:"QF",SF:"SF",F:"FINAL"}
@@ -1021,11 +1113,12 @@ function rBaseline(el){
   // ── Real-result scoring (P1.5) ──
   h+='<div class="bl-compare-card"><h3>📊 '+T("scoreTitle")+'</h3>';
   if(!ACTUAL_RESULTS.ready){
-    // Before the tournament — no real results to score against yet.
+    // Before the tournament (or feed unreachable) — no real results to score against yet.
     h+='<p class="bl-pending">⏳ '+T("scoreWaiting")+'</p>';
   }else if(!ko["FINAL"]||!ko["FINAL"].w){
     // Results are in, but the user hasn't finished their own prediction — don't show a "0" card.
     h+='<p class="bl-pending">'+T("scoreNeedPrediction")+'</p>';
+    h+='<p class="bl-pending" style="margin-top:6px;font-size:11px;opacity:0.75">'+T("scoreLiveInfo",{n:ACTUAL_RESULTS.count||0})+'</p>';
   }else{
     var sc=scorePrediction(),b=sc.breakdown;
     var knockoutPts=b.r16+b.qf+b.sf+b.final,podiumPts=b.champ+b.runnerUp+b.third;
@@ -1035,6 +1128,7 @@ function rBaseline(el){
     h+='<div><span>'+T("scoreKnockoutLabel")+'</span><span>'+knockoutPts+'</span></div>';
     h+='<div><span>'+T("scorePodiumLabel")+'</span><span>'+podiumPts+'</span></div>';
     h+='</div>';
+    h+='<p class="bl-pending" style="margin-top:10px;font-size:11px;opacity:0.75">'+T("scoreLiveInfo",{n:ACTUAL_RESULTS.count||0})+'</p>';
   }
   h+='</div>';
   h+='</div>';
@@ -1235,7 +1329,7 @@ var I18N={
     baselineCompareTitle:"你的预测 vs 作者",baselineSameChamp:"✓ 你和作者押了同一个冠军！英雄所见略同",
     baselineDiffChamp:"你的冠军：{user} · 作者押的是：{base}",baselineFinishKO:"完成你的淘汰赛后可以和作者对比",
     scoreTitle:"赛果评分",scoreWaiting:"赛事 2026 年 6 月 11 日开赛后，这里显示你的预测得分",
-    scoreTotalLabel:"你的预测得分 ",scoreGroupLabel:"小组赛",scoreKnockoutLabel:"淘汰赛晋级",scorePodiumLabel:"冠亚季军",scoreNeedPrediction:"先完成你自己的淘汰赛预测，开赛后这里才会给你打分",
+    scoreTotalLabel:"你的预测得分 ",scoreGroupLabel:"小组赛",scoreKnockoutLabel:"淘汰赛晋级",scorePodiumLabel:"冠亚季军",scoreNeedPrediction:"先完成你自己的淘汰赛预测，开赛后这里才会给你打分",scoreLiveInfo:"已收录 {n} / 104 场真实赛果 · 数据源 ESPN · 实时更新",
     hintExpandGroup:"💡 点击小组展开，输入比分或一键选胜负",shareNeedKO:"请先完成全部淘汰赛，再生成预测海报。",shareLibFail:"html2canvas 未加载，请检查网络",shareGenFail:"生成失败：",
     ttSkip:"切歌",ttMusic:"播放 / 暂停",ttTheme:"切换主题",ttInfo:"玩法说明",
     histTitle:"我的历史预测",histClear:"清空",histLoad:"点击加载",
@@ -1287,7 +1381,7 @@ var I18N={
     baselineCompareTitle:"Your prediction vs Author",baselineSameChamp:"✓ You and the author backed the same champion! Great minds.",
     baselineDiffChamp:"Your champion: {user} · Author backed: {base}",baselineFinishKO:"Finish your knockout to compare with the author",
     scoreTitle:"Result scoring",scoreWaiting:"Once the cup kicks off (June 11, 2026), your prediction score shows up here",
-    scoreTotalLabel:"Your score ",scoreGroupLabel:"Group stage",scoreKnockoutLabel:"Knockout advancement",scorePodiumLabel:"Podium",scoreNeedPrediction:"Finish your own knockout prediction first — scoring kicks in once the tournament starts",
+    scoreTotalLabel:"Your score ",scoreGroupLabel:"Group stage",scoreKnockoutLabel:"Knockout advancement",scorePodiumLabel:"Podium",scoreNeedPrediction:"Finish your own knockout prediction first — scoring kicks in once the tournament starts",scoreLiveInfo:"{n} / 104 real results in · via ESPN · live",
     hintExpandGroup:"💡 Tap a group to expand — enter scores or pick a winner",shareNeedKO:"Finish the full knockout stage first to generate a poster.",shareLibFail:"html2canvas failed to load — check your network",shareGenFail:"Generation failed: ",
     ttSkip:"Skip track",ttMusic:"Play / Pause",ttTheme:"Toggle theme",ttInfo:"How to play",
     histTitle:"Your history",histClear:"Clear",histLoad:"Click to load",
@@ -1939,8 +2033,8 @@ function aG(player,team,phase,gk,mi,side,assist,force){
 }
 function cM(){document.getElementById("modal-root").innerHTML="";}
 
-document.addEventListener("DOMContentLoaded",function(){render();});
-if(document.readyState!=="loading")render();
+document.addEventListener("DOMContentLoaded",function(){render();fetchActualResults();});
+if(document.readyState!=="loading"){render();fetchActualResults();}
 
 
 
