@@ -548,6 +548,9 @@ th{white-space:nowrap}
   .bk-row img{width:13px;height:13px}
   .bk-row .name{font-size:11px}
 }
+/* Every slot in a round gets the same height (cards stay centred in it), so the connector lines —
+   which assume equal slices — meet the card centres even when a card is taller (wrapped pick buttons). */
+.bk-round:not(.final-col){display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto;grid-auto-rows:1fr}
 /* Winner-pick buttons: flag-sized so three fit the narrowest card; if flags fail to load the buttons
    show the team name instead and wrap onto a second line rather than being cut to "…". */
 .bk-act{gap:4px;flex-wrap:wrap}
@@ -2010,10 +2013,12 @@ prefetchLbPhotos(goals.concat(assists));}
 var toastTimer=null;
 // showToast(msg[, {action, onAction, duration, undo}]) — an optional action button (e.g. "Undo").
 // A live Undo offer outranks plain messages: those wait (latest one only) until it is gone.
-var toastIsUndo=false,toastQueued=null;
+var toastIsUndo=false,toastQueued=null,toastPending=null,toastPendingTimer=null;
 function showToast(msg,opts){
   var el=document.getElementById("toast");if(!el)return;opts=opts||{};
   if(toastIsUndo&&el.classList.contains("show")&&!opts.undo){toastQueued=[msg,opts];return;}
+  // A message that was about to follow the previous toast now waits for this newer one instead.
+  if(toastPendingTimer){clearTimeout(toastPendingTimer);toastPendingTimer=null;if(!toastQueued)toastQueued=toastPending;toastPending=null;}
   el.innerHTML="";
   var t=document.createElement("span");t.textContent=msg;el.appendChild(t);
   el.classList.toggle("has-act",!!opts.action);
@@ -2032,8 +2037,10 @@ function hideToast(){
   el.classList.remove("show");
   // Once faded, drop the button: a stale Undo must not stay focusable / clickable.
   setTimeout(function(){if(!el.classList.contains("show"))el.innerHTML="";},250);
-  if(toastQueued){var q=toastQueued;toastQueued=null;setTimeout(function(){showToast(q[0],q[1]);},260);}
+  if(toastQueued){toastPending=toastQueued;toastQueued=null;toastPendingTimer=setTimeout(function(){var q=toastPending;toastPending=null;toastPendingTimer=null;showToast(q[0],q[1]);},260);}
 }
+// Messages queued behind an Undo describe a state the Undo just reverted — drop them.
+function dropQueuedToasts(){clearTimeout(toastPendingTimer);toastPendingTimer=null;toastPending=null;toastQueued=null;}
 // ── UNDO ──
 // undoSnap = the prediction as it stood after the previous render, i.e. just before whatever the
 // user did next. Destructive actions arm a message (armUndo); render() then offers "Undo" for it.
@@ -2061,7 +2068,7 @@ function afterRenderUndo(pruned){
 }
 function offerUndo(msg,snap,after,kind){
   liveUndo={snap:snap,after:after,until:Date.now()+6000,kind:kind||null};
-  showToast(msg,{action:T("undo"),duration:6000,undo:true,onAction:function(){liveUndo=null;restorePrediction(snap);}});
+  showToast(msg,{action:T("undo"),duration:6000,undo:true,onAction:function(){liveUndo=null;dropQueuedToasts();restorePrediction(snap);}});
 }
 function restorePrediction(snap){
   pickSession=null;if(document.getElementById("modal-root").firstChild)cM(); // never swap state under an open picker / poster
@@ -2769,6 +2776,7 @@ function playCurrent(){
   if(!audio||!btn)return;
   if(!audio.src||audio.src==="")loadSong(currentSong);
   musicPlaying=true; // intent: a ⏭ pressed before the track actually starts must keep playing the next one
+  btn.className="ctrl-icon music playing"; // …and the button says so, so a second press is visibly a pause
   var started=audio.play();
   (started&&started.then?started:Promise.resolve()).then(function(){
     btn.className="ctrl-icon music playing";musicPlaying=true;failStreak=0;
