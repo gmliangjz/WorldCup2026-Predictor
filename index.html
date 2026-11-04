@@ -540,16 +540,20 @@ th{white-space:nowrap}
   .bk-row .sc{min-width:16px}
 }
 @media(max-width:400px){.bk-row{gap:6px}}
-@media(max-width:1365px){.bk-title{letter-spacing:0.3px}}
-@media(min-width:769px) and (max-width:1365px){
+@media(max-width:1439px){.bk-title{letter-spacing:0.3px}}
+/* Up to 1439px the rounds are 112–125px wide: compact rows so a 5-character name (阿尔及利亚) still fits. */
+@media(min-width:769px) and (max-width:1439px){
   .bk-round{min-width:112px}
   .bk-row{gap:5px}
   .bk-row img{width:13px;height:13px}
+  .bk-row .name{font-size:11px}
 }
-.bk-act{gap:4px}
-.bk-act button{padding:3px 6px}
+/* Winner-pick buttons: flag-sized so three fit the narrowest card; if flags fail to load the buttons
+   show the team name instead and wrap onto a second line rather than being cut to "…". */
+.bk-act{gap:4px;flex-wrap:wrap}
+.bk-act button{padding:3px 6px;flex:0 0 auto}
 .bk-act button img{width:14px;height:14px}
-.bk-act .bkw{max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bk-act .bkw{white-space:nowrap}
 /* Champion-path highlight bleeds into the card padding instead of eating name space. */
 .bk-row.is-cp{margin:-1px -4px;padding:3px 4px}
 @media(min-width:1600px){
