@@ -64,6 +64,7 @@ A single-file HTML simulator for the 2026 FIFA World Cup. Predict from the group
 - **Champagne-gold share poster**: 1080×1620 PNG, deep-forest-green base + champagne gold, with a 5-tier original tagline
 - **Bilingual i18n**: one-tap toggle covering UI, team names, player names, and taglines
 - **Light / dark theme**: follows the system or toggles manually
+- **Your own background music**: tap ▶ and pick audio files from your device — played locally, never uploaded
 - **localStorage autosave**: close the browser, your prediction stays
 - **Responsive**: mobile / 1080p / desktop breakpoints
 - **Live scoring vs real results**: now that the cup is underway, the app pulls real scores from ESPN's public JSON feed (no key, fetched client-side) and grades your bracket in real time
@@ -156,7 +157,7 @@ Each champion tier triggers an original Chinese commentary-style tagline, with a
 - [x] Champagne-gold share poster (1080×1620)
 - [x] 5 original champion taglines
 - [x] Bilingual + light/dark themes
-- [x] Shareable prediction URL (friends scan to see yours)
+- [x] Shareable prediction link (friends open it to see yours; the poster QR leads to the app)
 - [x] Prediction history (last 5)
 - [x] Live result scoring via ESPN's public API (shipped on matchday 2)
 - [ ] Pre-tournament squad refresh (2026)
@@ -195,6 +196,7 @@ MIT — see [LICENSE](LICENSE). Third-party assets (flags, photos, taglines): [N
 - **香槟金分享海报**：1080×1620 PNG，深墨绿底 + 香槟金，五档对应五段原创解说词
 - **中英双语 i18n**：右上角一键切换，UI / 球队名 / 球员名 / 文案全套双语
 - **浅色 / 深色主题**：跟随系统或手动切换
+- **自选背景音乐**：点 ▶ 选择你设备里的音乐文件即可播放——只在本地播放，不会上传
 - **localStorage 自动存档**：关闭浏览器不丢预测
 - **响应式适配**：移动端 / 1080p / 桌面三段断点
 - **真实赛果实时计分**：开赛后自动拉取真实比分（ESPN 公开 JSON 接口，免 key、纯前端 fetch），实时给你的预测打分
@@ -287,7 +289,7 @@ python -m http.server 8000   # 或：npx serve
 - [x] 香槟金分享海报（1080×1620）
 - [x] 5 档原创冠军解说词
 - [x] 中英双语 + 浅/深主题
-- [x] 分享 URL 携带预测 state（朋友扫码看你的预测）
+- [x] 分享链接携带完整预测（朋友打开链接即可查看；海报二维码直达首页）
 - [x] 历史预测记录（保存最近 5 次）
 - [x] 接入真实赛果实时计分（ESPN 公开接口，开赛第 2 天上线）
 - [ ] 2026 临开赛球员名单更新
