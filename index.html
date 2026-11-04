@@ -8,7 +8,7 @@
 <!-- ─── SEO + Social meta ───────────────────────────────────────────── -->
 <meta name="description" content="2026 FIFA 世界杯预测器 — 完整 48 队、528 球员花名册、模拟到决赛、导出香槟金海报。Single-file HTML predictor for the 2026 FIFA World Cup with 48 teams, real squads, and a shareable poster.">
 <meta name="author" content="jizhengliang">
-<meta name="theme-color" content="#07110C">
+<meta name="theme-color" content="#F8F9FA">
 
 <!-- Favicon: inline SVG (dark forest green disc + champagne gold "26") -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%2307110C'/><text x='50' y='66' font-family='-apple-system,sans-serif' font-size='42' font-weight='800' fill='%23E5C26A' text-anchor='middle'>26</text></svg>">
@@ -33,7 +33,9 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- Non-blocking: if Google Fonts is slow or unreachable (e.g. mainland China) the page renders with system fonts. -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"></noscript>
 <style>
 :root{
   --bg-paper:#F8F9FA;--bg-card:#FFFFFF;--bg-soft:#F4F5F7;--bg-input:#F8F8FC;
@@ -139,7 +141,8 @@ body.dark .t3i.nq{color:var(--ink-medium)}
 .modal-bg{position:fixed;inset:0;background:rgba(18,20,23,0.3);backdrop-filter:blur(8px);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px}
 .modal{background:var(--bg-card);border-radius:24px;padding:32px;max-width:420px;width:100%;box-shadow:0 24px 48px rgba(0,0,0,0.1);max-height:80vh;overflow:auto}
 .modal h3{font-size:20px;font-weight:800;letter-spacing:-0.5px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
-.modal h3 button{background:none;border:none;color:var(--ink-light);font-size:24px;cursor:pointer}
+.modal h3 button{background:none;border:none;color:var(--ink-light);font-size:24px;cursor:pointer;flex-shrink:0}
+.modal h3 .mt{display:flex;align-items:center;gap:10px;min-width:0}
 .modal p{color:var(--ink-medium);font-size:15px;line-height:1.6;margin:0 0 12px}
 .gg{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px}
 .kg{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
@@ -162,11 +165,12 @@ body.dark .t3i.nq{color:var(--ink-medium)}
 .bk-wrap{overflow-x:auto;padding:16px 0 40px;-webkit-overflow-scrolling:touch}
 .bk-wrap::-webkit-scrollbar{height:4px}
 .bk-wrap::-webkit-scrollbar-thumb{background:var(--line-delicate);border-radius:4px}
-.bk{display:flex;align-items:stretch;min-width:min-content}
-.bk-round{display:flex;flex-direction:column;justify-content:space-around;min-width:0;flex:1;padding:0}
-.bk-round.final-col{min-width:0;flex:1.3;padding:0 4px}
-.bk-title{text-align:center;font-size:12px;font-weight:700;color:var(--ink-light);margin-bottom:24px;text-transform:uppercase;letter-spacing:1px;line-height:1.2}
+.bk{display:flex;align-items:stretch}
+.bk-round{display:flex;flex-direction:column;justify-content:space-around;flex:1 1 0;min-width:104px;padding:0}
+.bk-round.final-col{flex:1.15 1 0;min-width:124px;padding:0 4px}
+.bk-title{text-align:center;font-size:12px;font-weight:700;color:var(--ink-light);margin-bottom:24px;text-transform:uppercase;letter-spacing:1px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bk-m-wrap{flex:1;display:flex;align-items:center;justify-content:center}
+.bk-m-wrap>.bk-m{flex:1 1 auto;min-width:0}
 .bk-conn{display:flex;flex-direction:column;justify-content:space-around;width:32px;min-width:32px;flex-shrink:0;margin-top:38px}
 .bk-conn-pair{display:flex;flex-direction:column;flex:1;justify-content:center;position:relative}
 .bk-conn-pair::before{content:'';position:absolute;right:8px;top:25%;bottom:25%;border-right:1px solid var(--line-delicate);border-top:1px solid var(--line-delicate);border-bottom:1px solid var(--line-delicate);width:24px;border-radius:0 7px 7px 0;transition:border-color 0.48s ease,box-shadow 0.48s ease}
@@ -187,7 +191,8 @@ body.dark .t3i.nq{color:var(--ink-medium)}
 .bk-row .sc{font-weight:800;font-size:14px;min-width:24px;text-align:center}
 .bk-vs{display:none}
 .bk-act{display:flex;gap:6px;justify-content:center;margin-top:8px;border-top:1px solid var(--line-delicate);padding-top:8px}
-.bk-act button{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:var(--bg-soft);color:var(--ink-medium);font-family:inherit}
+.bk-act button{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:var(--bg-soft);color:var(--ink-medium);font-family:inherit;line-height:1;min-width:0}
+.bk-act button img{width:16px;height:16px;border-radius:50%;display:block;object-fit:cover}
 .bk-act .bkw{color:var(--accent-success)}.bk-act .bkr{color:var(--ink-dark)}.bk-act .bkx{color:var(--accent-danger)}
 .bk-m{transition:border-color 0.48s ease,box-shadow 0.48s ease}
 .bk-m.on-cp{border-color:#E5B547;box-shadow:0 0 0 1px rgba(229,181,71,0.35),0 0 14px rgba(229,181,71,0.18),0 2px 8px rgba(0,0,0,0.04)}
@@ -272,6 +277,10 @@ body.dark .tabs button.on{background:rgba(255,255,255,0.08);color:var(--ink-dark
 .flash-update{animation:flashUpdate 0.8s ease-out}
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,12px);z-index:1200;padding:10px 16px;border-radius:100px;background:rgba(18,20,23,0.86);color:#fff;font-size:12px;font-weight:700;box-shadow:0 10px 28px rgba(18,20,23,0.18);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:opacity 0.18s ease,transform 0.18s ease}
 .toast.show{opacity:1;transform:translate(-50%,0)}
+.toast{display:flex;align-items:center;gap:14px;max-width:calc(100vw - 32px);bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+.toast.has-act.show{pointer-events:auto}
+.toast-act{appearance:none;-webkit-appearance:none;border:0;background:none;padding:4px 2px;margin:-4px -2px;font:inherit;font-weight:800;color:#E5C26A;cursor:pointer;white-space:nowrap}
+body.dark .toast-act{color:#7A5C00}
 body.dark .toast{background:rgba(255,255,255,0.9);color:#121417}
 
 /* (Removed dead .exporting-image + .share-footer rules — old full-page-screenshot share, replaced by the off-screen SHARE POSTER below.) */
@@ -341,7 +350,7 @@ body.dark .skel{background:linear-gradient(90deg,rgba(255,255,255,0.05) 0%,rgba(
 
 /* Small screen adaptation */
 @media(max-width:400px){
-  .hdr{padding:20px 12px 12px!important}
+  .hdr{padding:62px 12px 12px!important}
   .hdr h1{font-size:20px!important;gap:6px!important}
   .hdr .sub{font-size:11px}
   .tabs{padding:8px 8px 12px}
@@ -485,21 +494,58 @@ body.view-mode .mode-row{margin:18px 0 24px!important}
 .history-flag-wrap img{width:24px!important;height:17px!important;border-radius:2px;object-fit:cover}
 .history-champ{font-weight:700;color:var(--ink-dark);font-size:13px}
 .history-date{margin-left:auto;color:var(--ink-light);font-size:11px;font-family:"SF Mono","Menlo","Consolas",monospace}
+/* ─── P0 FIXES ─── */
+.hdr .sub .hdr-flag{width:16px;height:12px;border-radius:2px;object-fit:cover;vertical-align:-1px;margin-right:4px;box-shadow:0 0 0 0.5px rgba(0,0,0,0.15)}
+/* Narrow screens: the corner controls get their own row above the title and scroll away with the
+   page. Floating (position:fixed) they covered the centred title, and every card scrolled under them. */
+@media(max-width:900px){
+  .info-ctrl,.topbar-ctrl{position:absolute}
+  .hdr{padding-top:80px}
+}
+@media(max-width:768px){.hdr{padding-top:64px}}
+/* Desktop dark mode: the floating controls get a glass backing instead of icons drawn over content. */
+@media(min-width:901px){
+  body.dark .topbar-ctrl{background:rgba(12,26,18,0.72);border:1px solid rgba(229,194,106,0.10);padding:5px;gap:3px;box-shadow:0 8px 24px rgba(0,0,0,0.28);backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%)}
+  body.dark .info-dot{background:rgba(12,26,18,0.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+}
+body.dark .info-dot{color:var(--accent-gold)} /* was near-black on near-black (1.1:1) */
+/* Table headers never wrap ("净胜" / "积分" were breaking into two lines); CJK needs no tracking. */
+th{white-space:nowrap}
+:lang(zh) th{letter-spacing:0}
+/* Bracket: tighter connectors + card padding so 9 rounds fit side by side from 1280px up. */
+@media(min-width:769px){
+  .bk-conn{width:20px;min-width:20px}
+  .bk-conn-pair::before{width:14px;right:6px}
+  .bk-conn-r .bk-conn-pair::before{left:6px}
+  .bk-conn-pair::after{width:6px}
+  .bk-m{padding:7px 8px}
+  .bk-row{gap:6px}
+  .bk-row .sc{min-width:16px}
+}
+/* Champion-path highlight bleeds into the card padding instead of eating name space. */
+.bk-row.is-cp{margin:-1px -4px;padding:3px 4px}
+@media(min-width:1600px){
+  .bk-conn{width:28px;min-width:28px}
+  .bk-conn-pair::before{width:20px;right:8px}
+  .bk-conn-r .bk-conn-pair::before{left:8px}
+  .bk-conn-pair::after{width:8px}
+  .bk-m{padding:9px 11px}
+  .bk-row{gap:8px}
+}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
+<script>/* Apply the saved / OS theme before anything paints — no light flash for dark-mode users. */(function(){try{var t=localStorage.getItem("wc26_theme")||(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark")document.body.classList.add("dark");var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",t==="dark"?"#07110C":"#F8F9FA");}catch(e){}})();</script>
 <div id="viewBanner"></div>
 <div class="hdr">
   <h1>
     <svg class="logo" width="44" height="44" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-label="World Cup 2026"><circle cx="32" cy="32" r="30" fill="#07110C"/><circle cx="32" cy="32" r="29" fill="none" stroke="#E5C26A" stroke-width="1.5"/><circle cx="32" cy="20" r="6.5" fill="#E5C26A"/><ellipse cx="29.5" cy="17.8" rx="2.2" ry="1.5" fill="#F0CC7E" opacity="0.65"/><path d="M27 27 Q22.5 32 25 38 L28.5 42 L35.5 42 L39 38 Q41.5 32 37 27 Z" fill="#E5C26A"/><rect x="24" y="44" width="16" height="3" rx="0.6" fill="#E5C26A"/><rect x="22" y="48" width="20" height="3" rx="0.6" fill="#E5C26A"/><text x="32" y="59" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="5.5" font-weight="800" fill="#E5C26A" letter-spacing="0.4">2026</text></svg>
     <span data-i18n="title">2026世界杯预测器</span>
   </h1>
-  <div class="sub" data-i18n="hosts">🇺🇸 美国 · 🇲🇽 墨西哥 · 🇨🇦 加拿大</div>
+  <div class="sub" id="hostsLine"></div>
 </div>
 <div class="tabs" id="tabs"></div>
-<div class="main" id="app"></div><div class="toast" id="toast"></div>
+<div class="main" id="app"></div><div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div id="modal-root"></div>
 <div class="info-ctrl" tabindex="0" aria-label="How to play">
   <div class="info-dot">i</div>
@@ -775,9 +821,26 @@ var EN_OVERRIDE={
 "约旦":{"萨拉赫":"Salah Al-Daboubi"},
 "埃及":{"萨拉赫":"Mohamed Salah"}
 };
+// Third-party libs are only needed for the share poster and the champion confetti, so they load on
+// first use instead of blocking the first paint (and the whole app when jsDelivr is slow/unreachable).
+var LIB_SRC={
+  html2canvas:"https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js",
+  confetti:"https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"
+};
+var libLoading={};
+function loadLib(name){
+  if(typeof window[name]!=="undefined")return Promise.resolve(window[name]);
+  if(!libLoading[name])libLoading[name]=new Promise(function(resolve,reject){
+    var el=document.createElement("script");el.src=LIB_SRC[name];el.async=true;
+    el.onload=function(){if(typeof window[name]!=="undefined")resolve(window[name]);else{delete libLoading[name];reject(new Error(name+" missing"));}};
+    el.onerror=function(){delete libLoading[name];if(el.parentNode)el.parentNode.removeChild(el);reject(new Error(name+" failed to load"));};
+    document.head.appendChild(el);
+  });
+  return libLoading[name];
+}
 var photoCache={};
 function getPhotoUrl(n){return photoCache[n]!==undefined?photoCache[n]:null;}
-function loadPhotos(team,cb){var src=getPlayers(team),seen={},ps=[];for(var u=0;u<src.length;u++){if(!seen[src[u]]){seen[src[u]]=1;ps.push(src[u]);}}var ld=0;var tt=ps.length;for(var i=0;i<ps.length;i++){(function(pn){if(photoCache[pn]!==undefined){ld++;if(ld>=tt&&cb)cb();return;}var en=EN[pn];if(!en){photoCache[pn]=null;ld++;if(ld>=tt&&cb)cb();return;}var x=new XMLHttpRequest();x.open("GET","https://en.wikipedia.org/api/rest_v1/page/summary/"+encodeURIComponent(en),true);x.onload=function(){try{var d=JSON.parse(x.responseText);photoCache[pn]=d.thumbnail?d.thumbnail.source:null;}catch(e){photoCache[pn]=null;}ld++;if(ld>=tt&&cb)cb();};x.onerror=function(){photoCache[pn]=null;ld++;if(ld>=tt&&cb)cb();};x.timeout=5000;x.ontimeout=function(){photoCache[pn]=null;ld++;if(ld>=tt&&cb)cb();};x.send();})(ps[i]);}if(tt===0&&cb)cb();}
+function loadPhotos(team,cb,onEach){var src=getPlayers(team),seen={},ps=[];for(var u=0;u<src.length;u++){if(!seen[src[u]]){seen[src[u]]=1;ps.push(src[u]);}}var ld=0;var tt=ps.length;function done(pn){if(onEach)onEach(pn,photoCache[pn]);ld++;if(ld>=tt&&cb)cb();}for(var i=0;i<ps.length;i++){(function(pn){if(photoCache[pn]!==undefined){ld++;if(ld>=tt&&cb)cb();return;}var en=EN[pn];if(!en){photoCache[pn]=null;ld++;if(ld>=tt&&cb)cb();return;}var x=new XMLHttpRequest();x.open("GET","https://en.wikipedia.org/api/rest_v1/page/summary/"+encodeURIComponent(en),true);x.onload=function(){try{var d=JSON.parse(x.responseText);photoCache[pn]=d.thumbnail?d.thumbnail.source:null;}catch(e){photoCache[pn]=null;}done(pn);};x.onerror=function(){photoCache[pn]=null;done(pn);};x.timeout=5000;x.ontimeout=function(){photoCache[pn]=null;done(pn);};x.send();})(ps[i]);}if(tt===0&&cb)cb();}
 
 var R32D=[{i:"R1",h:"2A",a:"2B"},{i:"R2",h:"1E",a:"3_ABCDF"},{i:"R3",h:"1F",a:"2C"},{i:"R4",h:"1C",a:"2F"},{i:"R5",h:"1I",a:"3_CDFGH"},{i:"R6",h:"2E",a:"2I"},{i:"R7",h:"1A",a:"3_CEFHI"},{i:"R8",h:"1L",a:"3_EHIJK"},{i:"R9",h:"1D",a:"3_BEFIJ"},{i:"R10",h:"1G",a:"3_AEHIJ"},{i:"R11",h:"2K",a:"2L"},{i:"R12",h:"1H",a:"2J"},{i:"R13",h:"1B",a:"3_EFGIJ"},{i:"R14",h:"1J",a:"2H"},{i:"R15",h:"1K",a:"3_DEIJL"},{i:"R16",h:"2D",a:"2G"}];
 var R16P=[["R2","R5"],["R1","R3"],["R4","R6"],["R7","R8"],["R11","R12"],["R9","R10"],["R14","R16"],["R13","R15"]];
@@ -797,11 +860,16 @@ function loadState(){
       if(deserializeState(hash.substring(3))){
         isViewMode=true;
         document.body.classList.add("view-mode");
-        showViewBanner();
+        // The banner is drawn by applyI18N(): the language tables don't exist yet at this point.
         return; // skip localStorage restore — we're viewing a guest prediction
       }
     }
-    // ── Otherwise: restore from localStorage ──
+  }catch(e){}
+  loadOwnState();
+}
+// The visitor's own prediction lives in localStorage (view mode never saves over it).
+function loadOwnState(){
+  try{
     var g=localStorage.getItem("wc26_gm");if(g){gm=JSON.parse(g);}
     var k=localStorage.getItem("wc26_ko");if(k){ko=JSON.parse(k);}
     var s=localStorage.getItem("wc26_slog");if(s){slog=JSON.parse(s);}
@@ -855,6 +923,25 @@ function serializeState(){
     return btoa(unescape(encodeURIComponent(json))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
   }catch(e){console.error("serializeState failed:",e);return null;}
 }
+// A share link is untrusted input — anyone can hand-craft one. Everything read from it is
+// coerced here into a known-safe shape before it can reach the DOM: scores → integers 0-99,
+// teams / players → indices into our own tables, knockout ids → whitelist (blocks "__proto__").
+var KO_ID_RE=/^(R([1-9]|1[0-6])|L[1-8]|Q[1-4]|S[12]|FINAL|3RD)$/;
+function shareScore(v){var n=Number(v);return(isFinite(n)&&n>=0)?Math.min(99,Math.floor(n)):0;}
+function shareIdx(v,len){return(typeof v==="number"&&v>=0&&v<len&&v%1===0)?v:-1;}
+function shareList(v){return Array.isArray(v)?v:[];}
+function sharePlayers(out,team,idxs,isGoal){
+  var roster=PL[team]||[];idxs=shareList(idxs);
+  for(var i=0;i<idxs.length;i++){var pi=shareIdx(idxs[i],roster.length);if(pi>=0)out.push({p:roster[pi],t:team,g:isGoal?1:0,a:isGoal?0:1});}
+}
+function shareSlog(kid,pairs,isGoal,teams){
+  pairs=shareList(pairs);
+  for(var i=0;i<pairs.length;i++){
+    var pr=shareList(pairs[i]),ti=shareIdx(pr[0],teams.length);if(ti<0)continue;
+    var team=teams[ti],roster=PL[team]||[],pi=shareIdx(pr[1],roster.length);
+    if(pi>=0)slog.push({mid:kid,t:team,p:roster[pi],g:isGoal?1:0,a:isGoal?0:1});
+  }
+}
 function deserializeState(encoded){
   if(!encoded)return false;
   try{
@@ -863,47 +950,35 @@ function deserializeState(encoded){
     var json=decodeURIComponent(escape(atob(b64)));
     var data=JSON.parse(json);
     if(!data||data.v!==SHARE_STATE_VERSION)return false;
-    var teams=Object.keys(PL);
+    var teams=Object.keys(PL),own=Object.prototype.hasOwnProperty;
     // Restore gm from compact format
     gm=initGM();
-    for(var grp in data.g){
-      if(!gm[grp])continue;
-      var arr=data.g[grp];
+    var dg=(data.g&&typeof data.g==="object")?data.g:{};
+    for(var grp in dg){
+      if(!own.call(dg,grp)||!own.call(gm,grp))continue;
+      var arr=shareList(dg[grp]);
       for(var i=0;i<arr.length&&i<gm[grp].length;i++){
         var entry=arr[i];
-        if(!entry||entry===0)continue;
-        var hs=entry[0],as=entry[1],hgS=entry[2]||[],hgA=entry[3]||[],agS=entry[4]||[],agA=entry[5]||[];
-        gm[grp][i].hs=String(hs);
-        gm[grp][i].as=String(as);
-        var ht=gm[grp][i].h,at=gm[grp][i].a;
-        var hg=[],ag=[];
-        for(var ii=0;ii<hgS.length;ii++){var pn=(PL[ht]||[])[hgS[ii]];if(pn)hg.push({p:pn,t:ht,g:1,a:0});}
-        for(var ii=0;ii<hgA.length;ii++){var pn=(PL[ht]||[])[hgA[ii]];if(pn)hg.push({p:pn,t:ht,g:0,a:1});}
-        for(var ii=0;ii<agS.length;ii++){var pn=(PL[at]||[])[agS[ii]];if(pn)ag.push({p:pn,t:at,g:1,a:0});}
-        for(var ii=0;ii<agA.length;ii++){var pn=(PL[at]||[])[agA[ii]];if(pn)ag.push({p:pn,t:at,g:0,a:1});}
-        gm[grp][i].hg=hg;gm[grp][i].ag=ag;
+        if(!Array.isArray(entry))continue; // 0 = unplayed
+        var m=gm[grp][i],hg=[],ag=[];
+        m.hs=String(shareScore(entry[0]));
+        m.as=String(shareScore(entry[1]));
+        sharePlayers(hg,m.h,entry[2],true);sharePlayers(hg,m.h,entry[3],false);
+        sharePlayers(ag,m.a,entry[4],true);sharePlayers(ag,m.a,entry[5],false);
+        m.hg=hg;m.ag=ag;
       }
     }
     // Restore ko + slog with proper g/a flags so rScorers can rebuild leaderboards correctly.
     ko={};slog=[];
-    for(var kid in data.k){
-      var e2=data.k[kid];
-      if(!e2)continue;
-      var wIdx=e2[0],lIdx=e2[1],hScore=e2[2],aScore=e2[3];
-      var matchScorers=e2[4]||[],matchAssists=e2[5]||[];
-      var wTeam=teams[wIdx],lTeam=teams[lIdx];
-      if(!wTeam||!lTeam)continue;
-      ko[kid]={w:wTeam,l:lTeam,h:hScore,a:aScore};
-      for(var s2=0;s2<matchScorers.length;s2++){
-        var ti=matchScorers[s2][0],pi=matchScorers[s2][1];
-        var team=teams[ti];
-        if(team&&PL[team]&&PL[team][pi])slog.push({mid:kid,t:team,p:PL[team][pi],g:1,a:0});
-      }
-      for(var s2=0;s2<matchAssists.length;s2++){
-        var ti=matchAssists[s2][0],pi=matchAssists[s2][1];
-        var team=teams[ti];
-        if(team&&PL[team]&&PL[team][pi])slog.push({mid:kid,t:team,p:PL[team][pi],g:0,a:1});
-      }
+    var dk=(data.k&&typeof data.k==="object")?data.k:{};
+    for(var kid in dk){
+      if(!own.call(dk,kid)||!KO_ID_RE.test(kid))continue;
+      var e2=dk[kid];if(!Array.isArray(e2))continue;
+      var wIdx=shareIdx(e2[0],teams.length),lIdx=shareIdx(e2[1],teams.length);
+      if(wIdx<0||lIdx<0)continue;
+      ko[kid]={w:teams[wIdx],l:teams[lIdx],h:shareScore(e2[2]),a:shareScore(e2[3])};
+      shareSlog(kid,e2[4],true,teams);
+      shareSlog(kid,e2[5],false,teams);
     }
     if(ko["FINAL"]&&ko["FINAL"].w)lastCelebratedChamp=ko["FINAL"].w;
     return true;
@@ -1065,15 +1140,27 @@ function loadCachedActualResults(){
   try{var c=JSON.parse(localStorage.getItem("wc26_actual")||"null");if(c&&c.ready){ACTUAL_RESULTS=c;return true;}}catch(e){}
   return false;
 }
+var KICKOFF_TS=Date.parse("2026-06-11T00:00:00Z");
+var RESULTS_STATE="idle"; // idle | loading | ok | error — drives the Author-tab results card
 function fetchActualResults(){
-  if(Date.now()<Date.parse("2026-06-11T00:00:00Z"))return; // nothing to score before kickoff
+  if(Date.now()<KICKOFF_TS)return; // nothing to score before kickoff
   loadCachedActualResults(); // paint from cache immediately; network refresh follows
-  if(typeof fetch!=="function")return;
+  if(ACTUAL_RESULTS.ready&&ACTUAL_RESULTS.knockout&&ACTUAL_RESULTS.knockout.FINAL){RESULTS_STATE="ok";return;} // cup over, final cached
+  if(typeof fetch!=="function"){RESULTS_STATE=ACTUAL_RESULTS.ready?"ok":"error";return;}
+  RESULTS_STATE="loading";
   fetch(RESULTS_API).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json();}).then(function(j){
-    var n=applyEspnResults(j);
-    if(n>0){cacheActualResults();render();}
-  }).catch(function(e){/* offline or API moved — cached copy (if any) is already applied */});
+    if(applyEspnResults(j)>0)cacheActualResults();
+    RESULTS_STATE=ACTUAL_RESULTS.ready?"ok":"error";
+    refreshResultsView();
+  }).catch(function(e){
+    RESULTS_STATE=ACTUAL_RESULTS.ready?"ok":"error"; // offline or API moved — a cached copy (if any) is already applied
+    refreshResultsView();
+  });
 }
+// Only the Author tab shows results: re-rendering elsewhere could yank focus out of a score input.
+function refreshResultsView(){if(tab==="baseline")render();}
+function retryResults(){RESULTS_STATE="loading";refreshResultsView();fetchActualResults();}
+function resultsInfo(){var n=ACTUAL_RESULTS.count||0;return n>=104?T("scoreAllIn"):T("scoreLiveInfo",{n:n});}
 function rBaseline(el){
   var stageLbl=(LANG==="en")
     ?{R32:"R32",R16:"R16",QF:"QF",SF:"SF",F:"FINAL"}
@@ -1114,11 +1201,13 @@ function rBaseline(el){
   h+='<div class="bl-compare-card"><h3>📊 '+T("scoreTitle")+'</h3>';
   if(!ACTUAL_RESULTS.ready){
     // Before the tournament (or feed unreachable) — no real results to score against yet.
-    h+='<p class="bl-pending">⏳ '+T("scoreWaiting")+'</p>';
+    if(Date.now()<KICKOFF_TS)h+='<p class="bl-pending">⏳ '+T("scoreWaiting")+'</p>';
+    else if(RESULTS_STATE==="error")h+='<p class="bl-pending">'+T("scoreFailed")+'</p><button class="b" style="margin-top:10px" onclick="retryResults()">'+T("scoreRetry")+'</button>';
+    else h+='<p class="bl-pending">⏳ '+T("scoreLoading")+'</p>';
   }else if(!ko["FINAL"]||!ko["FINAL"].w){
     // Results are in, but the user hasn't finished their own prediction — don't show a "0" card.
     h+='<p class="bl-pending">'+T("scoreNeedPrediction")+'</p>';
-    h+='<p class="bl-pending" style="margin-top:6px;font-size:11px;opacity:0.75">'+T("scoreLiveInfo",{n:ACTUAL_RESULTS.count||0})+'</p>';
+    h+='<p class="bl-pending" style="margin-top:6px;font-size:11px;opacity:0.75">'+resultsInfo()+'</p>';
   }else{
     var sc=scorePrediction(),b=sc.breakdown;
     var knockoutPts=b.r16+b.qf+b.sf+b.final,podiumPts=b.champ+b.runnerUp+b.third;
@@ -1128,7 +1217,7 @@ function rBaseline(el){
     h+='<div><span>'+T("scoreKnockoutLabel")+'</span><span>'+knockoutPts+'</span></div>';
     h+='<div><span>'+T("scorePodiumLabel")+'</span><span>'+podiumPts+'</span></div>';
     h+='</div>';
-    h+='<p class="bl-pending" style="margin-top:10px;font-size:11px;opacity:0.75">'+T("scoreLiveInfo",{n:ACTUAL_RESULTS.count||0})+'</p>';
+    h+='<p class="bl-pending" style="margin-top:10px;font-size:11px;opacity:0.75">'+resultsInfo()+'</p>';
   }
   h+='</div>';
   h+='</div>';
@@ -1157,6 +1246,7 @@ function loadFromHistory(idx){
     var hist=JSON.parse(localStorage.getItem("wc26_history")||"[]");
     var entry=hist[idx];
     if(!entry||!entry.e)return;
+    armUndo(T("toastHistoryLoaded"),hasPrediction());
     if(deserializeState(entry.e)){
       // Loaded prediction is now the user's current state — leave view mode if active
       isViewMode=false;
@@ -1207,9 +1297,11 @@ function exitViewMode(){
   document.body.classList.remove("view-mode");
   var el=document.getElementById("viewBanner");
   if(el)el.innerHTML="";
-  // Fresh start
-  gm=initGM();ko={};slog=[];tab="groups";expG=null;lastCelebratedChamp=null;
-  saveState();
+  // Back to the visitor's OWN prediction. (This used to start fresh and save over it, silently
+  // wiping whatever they had predicted before opening a friend's link.)
+  gm=initGM();ko={};slog=[];tab="groups";expG=null;lastCelebratedChamp=null;undoSnap=null;
+  loadOwnState();
+  if(playMode==="clone")rebuildAllScorers();
   render();
 }
 // JS-level lockdown after each render — defense in depth beyond CSS rules.
@@ -1218,6 +1310,7 @@ function applyViewModeLockdown(){
   // Disable every input (scores, manual pick fields, etc.)
   var inputs=document.querySelectorAll("input,select,textarea");
   for(var i=0;i<inputs.length;i++){
+    if(inputs[i].id==="musicFile")continue; // picking your own music isn't editing the prediction
     inputs[i].disabled=true;
     inputs[i].setAttribute("aria-readonly","true");
   }
@@ -1228,7 +1321,8 @@ function applyViewModeLockdown(){
     var b=btns[j];
     var oc=b.getAttribute("onclick")||"";
     // Keep: tab switches, modal close, language/theme/music toggles, exitViewMode, scroll, info-ctrl
-    if(/cM\(\)|toggleLang|toggleTheme|toggleMusic|skipSong|exitViewMode|tab=|scrollTo/.test(oc))continue;
+    if(/cM\(\)|closeModal|toggleLang|toggleTheme|toggleMusic|skipSong|exitViewMode|retryResults|tab=|scrollTo/.test(oc))continue;
+    if(b.closest&&b.closest("#toast"))continue;
     if(b.classList.contains("vb-btn"))continue;
     b.disabled=true;
   }
@@ -1256,13 +1350,15 @@ function copyShareLink(){
     navigator.clipboard.writeText(url).then(done).catch(fail);
   }else{fail();}
 }
-function clearState(){localStorage.removeItem("wc26_gm");localStorage.removeItem("wc26_ko");localStorage.removeItem("wc26_slog");localStorage.removeItem("wc26_tab");localStorage.removeItem("wc26_expG");gm=initGM();ko={};slog=[];tab="groups";expG=null;render();}
+function clearState(){armUndo(T("toastClearSave"),hasPrediction());localStorage.removeItem("wc26_gm");localStorage.removeItem("wc26_ko");localStorage.removeItem("wc26_slog");localStorage.removeItem("wc26_tab");localStorage.removeItem("wc26_expG");gm=initGM();ko={};slog=[];tab="groups";expG=null;render();}
+var PLAY_MODES=[
+  {k:"normal",zh:"普通模式",en:"Normal"},
+  {k:"clone", zh:"克隆模式",en:"Clone"},
+  {k:"chaos", zh:"混沌模式",en:"Chaos"}
+];
+function modeLabel(k){for(var i=0;i<PLAY_MODES.length;i++)if(PLAY_MODES[i].k===k)return LANG==="en"?PLAY_MODES[i].en:PLAY_MODES[i].zh;return k;}
 function modeControl(){
-  var modes=[
-    {k:"normal",zh:"普通模式",en:"Normal"},
-    {k:"clone", zh:"克隆模式",en:"Clone"},
-    {k:"chaos", zh:"混沌模式",en:"Chaos"}
-  ];
+  var modes=PLAY_MODES;
   var label=LANG==="en"?"Play mode":"玩法模式";
   var h='<div class="mode-row"><div class="play-mode '+playMode+'" role="group" aria-label="'+label+'">';
   for(var i=0;i<modes.length;i++){
@@ -1290,7 +1386,8 @@ function setPlayMode(mode){
       else btns[i].classList.remove("on");
     }
   }
-  // Step 2: persist new mode
+  // Step 2: persist new mode (the old prediction is cleared below — offer an undo for it)
+  armUndo(T("toastModeSwitched",{mode:modeLabel(mode)}),hasPrediction());
   playMode=mode;
   localStorage.setItem("wc26_play_mode",playMode);
   // Step 3: fresh start — clear the previous mode's prediction so each mode begins clean.
@@ -1300,12 +1397,13 @@ function setPlayMode(mode){
   setTimeout(function(){render();},340);
 }
 loadState();
-if(playMode==="clone")rebuildAllScorers();
+if(playMode==="clone"&&!isViewMode)rebuildAllScorers(); // never re-roll a friend's shared scorers
 // ── THEME (light/dark) ──
 // Persisted to localStorage. On first visit, follows OS preference via prefers-color-scheme.
 var theme=localStorage.getItem("wc26_theme")||((window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light");
 function applyTheme(){
   if(theme==="dark")document.body.classList.add("dark");else document.body.classList.remove("dark");
+  var meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.setAttribute("content",theme==="dark"?"#07110C":"#F8F9FA");
   var btn=document.getElementById("themeBtn");
   if(btn)btn.textContent=theme==="dark"?"☀":"🌙";
 }
@@ -1321,7 +1419,6 @@ document.documentElement.lang=(LANG==="zh")?"zh-CN":"en";
 var I18N={
   zh:{
     title:"2026世界杯预测器",
-    hosts:"🇺🇸 美国 · 🇲🇽 墨西哥 · 🇨🇦 加拿大",
     tabGroups:"小组赛",tabKnockout:"淘汰赛",tabScorers:"数据榜",tabBaseline:"作者",
     baselineTitle:"作者预测",
     baselineSubtitle:"这是作者本人押的宝。看看你的预测和作者差多少 —— 英雄所见略同，还是各执一词？",
@@ -1366,14 +1463,23 @@ var I18N={
     sharingDesc:"正在渲染淘汰赛对阵海报",
     btnCopyLink:"🔗 复制分享链接",linkCopied:"✓ 已复制!",linkFailed:"复制失败",
     viewModeText:"这是一份分享的预测",viewModeAction:"我也来预测一份",
-    posterModalTitle:"长按保存海报",btnDownloadPoster:"💾 下载海报",btnCloseModal:"关闭",
+    posterModalTitle:"你的冠军海报",btnDownloadPoster:"💾 下载海报",btnCloseModal:"关闭",
     groupMatchesTitle:"⚽ {g}组 · 比赛 & 比分",
     pickManually:"🎯 改为手动选择进球",
-    mustFinishHint:"💡 选完全部进球后会自动关闭"
+    mustFinishHint:"💡 选完全部进球后自动关闭 · 点 ✕ 取消并恢复原记录",
+    undo:"撤销",toastRestored:"已恢复",
+    toastResetAll:"已重置全部比赛",toastResetGroup:"已重置{g}",toastClearSave:"存档已清除",
+    toastModeSwitched:"已切换到{mode}，原预测已清空",toastResetKO:"淘汰赛已重置",
+    toastKOPruned:"已清除 {n} 场受影响的淘汰赛结果",toastRandAll:"已重新随机全部小组赛",toastRandKO:"已重新随机全部淘汰赛",
+    toastHistoryLoaded:"已载入历史预测",
+    scoreLoading:"正在获取真实赛果…",scoreFailed:"暂时无法获取真实赛果（网络或数据源不可用）",scoreRetry:"重试",
+    scoreAllIn:"全部 104 场真实赛果已收录 · 数据源 ESPN",
+    musicPick:"选几首你自己的音乐来播放吧",musicPickAction:"选择音乐",musicAdded:"已添加 {n} 首",
+    musicTapPlay:"已添加 {n} 首，点 ▶ 开始播放",musicCantPlay:"这个文件无法播放，已跳过",
+    btnCancel:"取消",posterHintTouch:"长按图片即可保存到相册"
   },
   en:{
     title:"2026 World Cup Predictor",
-    hosts:"🇺🇸 USA · 🇲🇽 Mexico · 🇨🇦 Canada",
     tabGroups:"Group Stage",tabKnockout:"Knockout",tabScorers:"Stats",tabBaseline:"Author",
     baselineTitle:"Author's Pick",
     baselineSubtitle:"This is the author's own call. See how your bracket stacks up against it.",
@@ -1418,10 +1524,20 @@ var I18N={
     sharingDesc:"Rendering the knockout image",
     btnCopyLink:"🔗 Copy share link",linkCopied:"✓ Copied!",linkFailed:"Copy failed",
     viewModeText:"You're viewing a shared prediction",viewModeAction:"Make your own prediction",
-    posterModalTitle:"Long-press to save",btnDownloadPoster:"💾 Download poster",btnCloseModal:"Close",
+    posterModalTitle:"Your champion poster",btnDownloadPoster:"💾 Download poster",btnCloseModal:"Close",
     groupMatchesTitle:"⚽ Group {g} · Matches & Scores",
     pickManually:"🎯 Pick scorers manually",
-    mustFinishHint:"💡 Modal will close once every goal is picked"
+    mustFinishHint:"💡 Closes once every goal is picked · ✕ cancels and restores the previous scorers",
+    undo:"Undo",toastRestored:"Restored",
+    toastResetAll:"All matches reset",toastResetGroup:"{g} reset",toastClearSave:"Save cleared",
+    toastModeSwitched:"Switched to {mode} — previous picks cleared",toastResetKO:"Knockout reset",
+    toastKOPruned:"{n} affected knockout results cleared",toastRandAll:"All group matches re-randomized",toastRandKO:"All knockouts re-randomized",
+    toastHistoryLoaded:"Saved prediction loaded",
+    scoreLoading:"Fetching real results…",scoreFailed:"Couldn't load real results right now (network or data source unavailable)",scoreRetry:"Retry",
+    scoreAllIn:"All 104 real results in · via ESPN",
+    musicPick:"Play your own music — pick a few tracks",musicPickAction:"Choose music",musicAdded:"{n} tracks added",
+    musicTapPlay:"{n} tracks added — tap ▶ to play",musicCantPlay:"Couldn't play that file — skipped",
+    btnCancel:"Cancel",posterHintTouch:"Long-press the image to save it"
   }
 };
 var TEAM_EN={"墨西哥":"Mexico","南非":"South Africa","韩国":"South Korea","捷克":"Czechia","加拿大":"Canada","波黑":"Bosnia","卡塔尔":"Qatar","瑞士":"Switzerland","巴西":"Brazil","摩洛哥":"Morocco","海地":"Haiti","苏格兰":"Scotland","美国":"USA","巴拉圭":"Paraguay","澳大利亚":"Australia","土耳其":"Türkiye","德国":"Germany","库拉索":"Curaçao","科特迪瓦":"Côte d'Ivoire","厄瓜多尔":"Ecuador","荷兰":"Netherlands","日本":"Japan","瑞典":"Sweden","突尼斯":"Tunisia","比利时":"Belgium","埃及":"Egypt","伊朗":"Iran","新西兰":"New Zealand","西班牙":"Spain","佛得角":"Cape Verde","沙特":"Saudi Arabia","乌拉圭":"Uruguay","法国":"France","伊拉克":"Iraq","塞内加尔":"Senegal","挪威":"Norway","阿根廷":"Argentina","阿尔及利亚":"Algeria","奥地利":"Austria","约旦":"Jordan","葡萄牙":"Portugal","刚果金":"DR Congo","乌兹别克":"Uzbekistan","哥伦比亚":"Colombia","英格兰":"England","克罗地亚":"Croatia","加纳":"Ghana","巴拿马":"Panama"};
@@ -1445,6 +1561,10 @@ function applyI18N(){
   var sk=document.getElementById("skipBtn");if(sk)sk.title=T("ttSkip");
   var mu=document.getElementById("musicBtn");if(mu)mu.title=T("ttMusic");
   var th=document.getElementById("themeBtn");if(th)th.title=T("ttTheme");
+  // Host line uses flag images: Windows can't draw flag emoji (they show up as "US", "MX", "CA").
+  var hl=document.getElementById("hostsLine");
+  if(hl)hl.innerHTML=["美国","墨西哥","加拿大"].map(function(t){return '<img class="hdr-flag" src="https://flagcdn.com/w40/'+FC[t]+'.png" alt="" onerror="this.style.display=\'none\'">'+tn(t);}).join(" · ");
+  if(isViewMode)showViewBanner();
 }
 function toggleLang(){LANG=LANG==="zh"?"en":"zh";localStorage.setItem("wc26_lang",LANG);document.documentElement.lang=(LANG==="zh")?"zh-CN":"en";applyI18N();render();}
 applyI18N();
@@ -1552,7 +1672,8 @@ function calcS(ts,ms){var s={};for(var i=0;i<ts.length;i++)s[ts[i]]={t:ts[i],p:0
 function gcDone(k){for(var i=0;i<gm[k].length;i++)if(gm[k][i].hs===""||gm[k][i].as==="")return false;return true;}
 function allDone(){for(var k in GD)if(!gcDone(k))return false;return true;}
 function getSt(){var s={};for(var k in GD)s[k]=calcS(GD[k],gm[k]);return s;}
-function getT3(st){var t=[];for(var k in st)if(st[k][2])t.push({t:st[k][2].t,p:st[k][2].p,gf:st[k][2].gf,ga:st[k][2].ga,gd:st[k][2].gd,g:k});t.sort(function(a,b){return b.p-a.p||b.gd-a.gd||b.gf-a.gf||teamFallback(a,b);});return t.slice(0,8);}
+function getAllT3(st){var t=[];for(var k in st)if(st[k][2])t.push({t:st[k][2].t,p:st[k][2].p,gf:st[k][2].gf,ga:st[k][2].ga,gd:st[k][2].gd,g:k});t.sort(function(a,b){return b.p-a.p||b.gd-a.gd||b.gf-a.gf||teamFallback(a,b);});return t;}
+function getT3(st){return getAllT3(st).slice(0,8);} // the 8 best third-placed teams advance
 var t3Assign={};
 function assignThirds(t3){
   var slots=[
@@ -1585,7 +1706,9 @@ function getT3Team(slot){return t3Assign[slot]||null;}
 function getS(s,st,t3){if(s.indexOf("3_")===0)return getT3Team(s);var p=parseInt(s[0]),g=s[1];if(st[g]&&st[g][p-1])return st[g][p-1].t;return null;}
 
 function render(){try{
+var koBefore=koCount();
 pruneStaleKO();
+var pruned=koBefore-koCount();
 var bkEl=document.querySelector(".bk-wrap");
 var bkScroll=bkEl?bkEl.scrollLeft:0;
 var te=document.getElementById("tabs"),ae=document.getElementById("app");
@@ -1598,8 +1721,10 @@ if(tab==="groups")rGroups(ae);else if(tab==="knockout")rKO(ae);else if(tab==="ba
 saveState();
 var bkEl2=document.querySelector(".bk-wrap");
 if(bkEl2&&bkScroll>0)bkEl2.scrollLeft=bkScroll;
+updateBracketHint();
 checkChampion();
 if(isViewMode)applyViewModeLockdown();
+afterRenderUndo(pruned);
 }catch(e){document.getElementById("app").innerHTML='<div class="card" style="padding:20px;color:red">'+(LANG==="en"?"Error":"错误")+": "+e.message+'</div>';}}
 
 function rGroups(el){
@@ -1633,13 +1758,13 @@ h+='<div class="split-right">';
 if(expG){h+='<h3>'+T("groupMatchesTitle",{g:expG})+'</h3>'+matchHTML;}
 else{h+='<div style="text-align:center;padding:40px 20px;color:var(--ink-light)"><div style="font-size:32px;margin-bottom:8px">👈</div><p>'+T("selectGroupLine1")+'<br>'+T("selectGroupLine2")+'</p></div>';}
 h+='</div></div>';
-if(ad){var t3=getT3(st);h+='<div class="t3-box"><div class="card" style="padding:14px"><h3>'+T("t3Title")+'</h3><div class="t3g">';for(var ti=0;ti<t3.length;ti++){var tt=t3[ti];h+='<div class="t3i '+(ti<8?"q":"nq")+'"><span style="font-weight:700;min-width:14px">'+(ti+1)+'</span>'+fi(tt.t,"fls")+" "+tn(tt.t)+'<span style="margin-left:auto;opacity:.6">'+tt.p+T("pts")+'</span></div>';}h+='</div></div></div>';}
+if(ad){var t3=getAllT3(st);h+='<div class="t3-box"><div class="card" style="padding:14px"><h3>'+T("t3Title")+'</h3><div class="t3g">';for(var ti=0;ti<t3.length;ti++){var tt=t3[ti];h+='<div class="t3i '+(ti<8?"q":"nq")+'"><span style="font-weight:700;min-width:14px">'+(ti+1)+'</span>'+fi(tt.t,"fls")+" "+tn(tt.t)+'<span style="margin-left:auto;opacity:.6">'+tt.p+T("pts")+'</span></div>';}h+='</div></div></div>';}
 el.innerHTML=h;}
 
 function buildMatchHTML(gk){
 var h='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span style="font-size:11px;color:var(--ink-light);font-weight:600">'+T("matchCount")+'</span><div style="display:flex;gap:4px"><button class="b br" style="font-size:9px" onclick="rG(\''+gk+'\')">'+T("randGroup")+'</button><button class="b bx" style="font-size:9px" onclick="rsG(\''+gk+'\')">↺</button></div></div>';
 for(var mi=0;mi<gm[gk].length;mi++){var m=gm[gk][mi],sc=m.hs!==""&&m.as!=="";
-h+='<div class="mr"><div class="mr-teams"><span class="tn r">'+fi(m.h,"fls")+" "+tn(m.h)+'</span><input value="'+m.hs+'" oninput="uGM(\''+gk+'\','+mi+',\'hs\',this.value)" onblur="uGMDone()" inputmode="numeric" placeholder="-"><span class="sep">-</span><input value="'+m.as+'" oninput="uGM(\''+gk+'\','+mi+',\'as\',this.value)" onblur="uGMDone()" inputmode="numeric" placeholder="-"><span class="tn">'+fi(m.a,"fls")+" "+tn(m.a)+'</span></div>';
+h+='<div class="mr"><div class="mr-teams"><span class="tn r">'+fi(m.h,"fls")+" "+tn(m.h)+'</span><input value="'+escHtml(m.hs)+'" oninput="uGM(\''+gk+'\','+mi+',\'hs\',this.value)" onblur="uGMDone()" inputmode="numeric" placeholder="-"><span class="sep">-</span><input value="'+escHtml(m.as)+'" oninput="uGM(\''+gk+'\','+mi+',\'as\',this.value)" onblur="uGMDone()" inputmode="numeric" placeholder="-"><span class="tn">'+fi(m.a,"fls")+" "+tn(m.a)+'</span></div>';
 h+='<div class="btns"><button class="b bw" onclick="qpG(\''+gk+'\','+mi+',\'h\')">'+(LANG==="en"?"👈 Home wins":"👈 胜")+'</button><button class="b bd" onclick="qpG(\''+gk+'\','+mi+',\'d\')">'+(LANG==="en"?"🤝 Draw":"🤝 平")+'</button><button class="b bw" onclick="qpG(\''+gk+'\','+mi+',\'a\')">'+(LANG==="en"?"Away wins 👉":"胜 👉")+'</button><button class="b br" onclick="rmG(\''+gk+'\','+mi+')">🎲</button>';
 if(sc){var hGoals=parseInt(m.hs)||0,aGoals=parseInt(m.as)||0;
 if(hGoals>0)h+='<button class="b" style="font-size:9px" onclick="oS(\''+m.h+'\',\'group\',\''+gk+'\','+mi+',\'h\')">⚽'+fi(m.h,"fls")+'</button>';
@@ -1654,7 +1779,7 @@ var cp=getChampionPath();
 // Share button: enabled only after final winner is decided
 var koDone=!!ko["FINAL"];
 var shareBtn=koDone?'<button class="btn-rand" onclick="genShareCard()">'+T("btnShare")+'</button>':'<button class="btn-rand dim" disabled>'+T("btnShare")+'</button>';
-var h=modeControl()+'<div class="topbar"><button class="btn-rand" onclick="raKO()">'+T("btnRandKO")+'</button><button class="btn-reset" onclick="ko={};slog=[];render()">'+T("btnResetKO")+'</button>'+shareBtn+'</div>';
+var h=modeControl()+'<div class="topbar"><button class="btn-rand" onclick="raKO()">'+T("btnRandKO")+'</button><button class="btn-reset" onclick="rsaKO()">'+T("btnResetKO")+'</button>'+shareBtn+'</div>';
 // Build bracket data
 var r32m=[];for(var i=0;i<R32D.length;i++){var m=R32D[i];r32m.push({id:m.i,ht:getS(m.h,st,t3),at:m.a.indexOf("3_")===0?getT3Team(m.a):getS(m.a,st,t3)});}
 var r16m=[];for(var i=0;i<R16P.length;i++)r16m.push({id:"L"+(i+1),ht:ko[R16P[i][0]]?ko[R16P[i][0]].w:null,at:ko[R16P[i][1]]?ko[R16P[i][1]].w:null});
@@ -1668,7 +1793,7 @@ var leftR16=pick(r16m,["L1","L2","L5","L6"]),rightR16=pick(r16m,["L3","L4","L7",
 var leftQF=pick(qfm,["Q1","Q2"]),rightQF=pick(qfm,["Q3","Q4"]);
 // Left bracket: R32[0-7] → R16[0-3] → QF[0-1] → SF[0]
 // Right bracket: R32[8-15] → R16[4-7] → QF[2-3] → SF[1]
-h+='<p style="text-align:center;font-size:11px;color:var(--ink-light);margin-bottom:8px">'+T("bracketHint")+'</p>';
+h+='<p class="bk-hint" style="text-align:center;font-size:11px;color:var(--ink-light);margin-bottom:8px">'+T("bracketHint")+'</p>';
 function ids(arr){return arr.map(function(m){return m.id;});}
 h+='<div class="bk-wrap"><div class="bk">';
 // Left side
@@ -1763,16 +1888,22 @@ for(var i=0;i<pairs;i++){
 }
 return h+'</div>';}
 
+// Bracket cards share one width per round, so names must stay short: English shows FIFA codes
+// (full name in the tooltip); Chinese names are already 2–5 characters.
+function bkTeam(t){return(LANG==="en"&&TEAM_ABBR[t])?TEAM_ABBR[t]:tn(t);}
+function winLabel(t){return LANG==="en"?tn(t)+" wins":tn(t)+" 胜";}
+function updateBracketHint(){var w=document.querySelector(".bk-wrap"),h=document.querySelector(".bk-hint");if(w&&h)h.hidden=!(w.scrollWidth>w.clientWidth+1);}
+window.addEventListener("resize",updateBracketHint);
 function bkMatch(m,cp){
 var r=ko[m.id];var ht=m.ht,at=m.at;
 if(!ht||!at)return '<div class="bk-m wait"><div class="bk-row"><span class="name" style="text-align:center;color:var(--ink-light)">?</span></div><div class="bk-vs">vs</div><div class="bk-row"><span class="name" style="text-align:center;color:var(--ink-light)">?</span></div></div>';
 var onPath=cp&&cp.set[m.id];
 var htCp=onPath&&ht===cp.champ,atCp=onPath&&at===cp.champ;
 var h='<div class="bk-m'+(r?" won":"")+(onPath?" on-cp":"")+(onPath&&m.id==="FINAL"?" is-final":"")+'" data-mid="'+m.id+'">';
-h+='<div class="bk-row'+(htCp?" is-cp":"")+'">'+fi(ht,"fls")+' <span class="name'+(r&&r.w===ht?" w":"")+'">'+tn(ht)+'</span>'+(r?'<span class="sc">'+r.h+'</span>':'')+'</div>';
+h+='<div class="bk-row'+(htCp?" is-cp":"")+'">'+fi(ht,"fls")+' <span class="name'+(r&&r.w===ht?" w":"")+'" title="'+escHtml(tn(ht))+'">'+bkTeam(ht)+'</span>'+(r?'<span class="sc">'+escHtml(r.h)+'</span>':'')+'</div>';
 h+='<div class="bk-vs">vs</div>';
-h+='<div class="bk-row'+(atCp?" is-cp":"")+'">'+fi(at,"fls")+' <span class="name'+(r&&r.w===at?" w":"")+'">'+tn(at)+'</span>'+(r?'<span class="sc">'+r.a+'</span>':'')+'</div>';
-if(!r){h+='<div class="bk-act"><button class="bkw" onclick="qpKO(\''+m.id+'\',\''+ht+'\',\''+at+'\',\''+ht+'\')">'+tn(ht)+'</button><button class="bkw" onclick="qpKO(\''+m.id+'\',\''+ht+'\',\''+at+'\',\''+at+'\')">'+tn(at)+'</button><button class="bkr" onclick="rnKO(\''+m.id+'\',\''+ht+'\',\''+at+'\')">🎲</button></div>';}
+h+='<div class="bk-row'+(atCp?" is-cp":"")+'">'+fi(at,"fls")+' <span class="name'+(r&&r.w===at?" w":"")+'" title="'+escHtml(tn(at))+'">'+bkTeam(at)+'</span>'+(r?'<span class="sc">'+escHtml(r.a)+'</span>':'')+'</div>';
+if(!r){h+='<div class="bk-act"><button class="bkw" title="'+escHtml(winLabel(ht))+'" aria-label="'+escHtml(winLabel(ht))+'" onclick="qpKO(\''+m.id+'\',\''+ht+'\',\''+at+'\',\''+ht+'\')">'+fi(ht,"fls")+'</button><button class="bkw" title="'+escHtml(winLabel(at))+'" aria-label="'+escHtml(winLabel(at))+'" onclick="qpKO(\''+m.id+'\',\''+ht+'\',\''+at+'\',\''+at+'\')">'+fi(at,"fls")+'</button><button class="bkr" onclick="rnKO(\''+m.id+'\',\''+ht+'\',\''+at+'\')">🎲</button></div>';}
 else{h+='<div class="bk-act"><button class="bkx" onclick="delKO(\''+m.id+'\')">↺</button></div>';}
 return h+'</div>';}
 
@@ -1822,7 +1953,45 @@ prefetchLbPhotos(goals.concat(assists));}
 
 // ── ACTIONS ──
 var toastTimer=null;
-function showToast(msg){var el=document.getElementById("toast");if(!el)return;el.textContent=msg;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(function(){el.classList.remove("show");},1800);}
+// showToast(msg[, {action, onAction, duration}]) — an optional action button (e.g. "Undo").
+function showToast(msg,opts){
+  var el=document.getElementById("toast");if(!el)return;opts=opts||{};
+  el.innerHTML="";
+  var t=document.createElement("span");t.textContent=msg;el.appendChild(t);
+  el.classList.toggle("has-act",!!opts.action);
+  if(opts.action){
+    var b=document.createElement("button");b.type="button";b.className="toast-act";b.textContent=opts.action;
+    b.onclick=function(){hideToast();if(opts.onAction)opts.onAction();};
+    el.appendChild(b);
+  }
+  el.classList.add("show");
+  clearTimeout(toastTimer);toastTimer=setTimeout(hideToast,opts.duration||1800);
+}
+function hideToast(){var el=document.getElementById("toast");clearTimeout(toastTimer);if(el)el.classList.remove("show");}
+// ── UNDO ──
+// undoSnap = the prediction as it stood after the previous render, i.e. just before whatever the
+// user did next. Destructive actions arm a message (armUndo); render() then offers "Undo" for it.
+// A render that silently prunes knockout results (an upstream edit changed the bracket) offers it too.
+var undoSnap=null,pendingUndo=null;
+function koCount(){var n=0;for(var k in ko)if(ko[k])n++;return n;}
+function anyGroupScore(){for(var k in gm)for(var i=0;i<gm[k].length;i++)if(gm[k][i].hs!==""||gm[k][i].as!=="")return true;return false;}
+function hasPrediction(){return anyGroupScore()||koCount()>0;}
+function snapshotPrediction(){return{gm:JSON.stringify(gm),ko:JSON.stringify(ko),slog:JSON.stringify(slog),mode:playMode,tab:tab,expG:expG,champ:lastCelebratedChamp};}
+function armUndo(msg,when){if(when&&!isViewMode)pendingUndo=msg;}
+function afterRenderUndo(pruned){
+  if(!isViewMode&&undoSnap){
+    if(pendingUndo)offerUndo(pendingUndo,undoSnap);
+    else if(pruned>0)offerUndo(T("toastKOPruned",{n:pruned}),undoSnap);
+  }
+  pendingUndo=null;undoSnap=snapshotPrediction();
+}
+function offerUndo(msg,snap){showToast(msg,{action:T("undo"),duration:6000,onAction:function(){restorePrediction(snap);}});}
+function restorePrediction(snap){
+  gm=JSON.parse(snap.gm);ko=JSON.parse(snap.ko);slog=JSON.parse(snap.slog);tab=snap.tab;expG=snap.expG;
+  lastCelebratedChamp=snap.champ; // already celebrated: undo must not replay confetti or re-save history
+  if(playMode!==snap.mode){playMode=snap.mode;try{localStorage.setItem("wc26_play_mode",playMode);}catch(e){}}
+  pendingUndo=null;render();showToast(T("toastRestored"));
+}
 function uGM(gk,mi,f,v){
   var s=String(v||"").replace(/\D/g,"");
   if(s.length>2){showToast(LANG==="en"?"Max score is 99":"比分最大只能输入 99");s="99";}
@@ -1891,11 +2060,12 @@ function autoScore(gk,mi){
 function qpG(gk,mi,res){var m=gm[gk][mi];var r=rnd(true,m.h,m.a),h=r[0],a=r[1];if(res==="h"){if(h<=a)h=a+1+Math.floor(Math.random()*2);}else if(res==="a"){if(a<=h)a=h+1+Math.floor(Math.random()*2);}else a=h;m.hs=String(h);m.as=String(a);autoScore(gk,mi);render();}
 function rmG(gk,mi){var m=gm[gk][mi];var r=rnd(true,m.h,m.a);m.hs=String(r[0]);m.as=String(r[1]);autoScore(gk,mi);render();}
 function rG(gk){for(var i=0;i<gm[gk].length;i++){var m=gm[gk][i];var r=rnd(true,m.h,m.a);m.hs=String(r[0]);m.as=String(r[1]);autoScore(gk,i);}render();}
-function rsG(gk){for(var i=0;i<gm[gk].length;i++){gm[gk][i].hs="";gm[gk][i].as="";gm[gk][i].hg=[];gm[gk][i].ag=[];}render();}
-function raG(){for(var k in gm){for(var i=0;i<gm[k].length;i++){var m=gm[k][i];var r=rnd(true,m.h,m.a);m.hs=String(r[0]);m.as=String(r[1]);autoScore(k,i);}};render();}
+function rsG(gk){armUndo(T("toastResetGroup",{g:groupName(gk)}),gm[gk].some(function(m){return m.hs!==""||m.as!=="";}));for(var i=0;i<gm[gk].length;i++){gm[gk][i].hs="";gm[gk][i].as="";gm[gk][i].hg=[];gm[gk][i].ag=[];}render();}
+function raG(){armUndo(T("toastRandAll"),anyGroupScore());for(var k in gm){for(var i=0;i<gm[k].length;i++){var m=gm[k][i];var r=rnd(true,m.h,m.a);m.hs=String(r[0]);m.as=String(r[1]);autoScore(k,i);}};render();}
 // Fill ONLY matches that still have empty scores. Keeps user's manual picks intact.
 function raGRemaining(){for(var k in gm){for(var i=0;i<gm[k].length;i++){var m=gm[k][i];if(m.hs===""||m.as===""){var r=rnd(true,m.h,m.a);m.hs=String(r[0]);m.as=String(r[1]);autoScore(k,i);}}}render();}
-function rsaG(){gm=initGM();ko={};slog=[];render();}
+function rsaG(){armUndo(T("toastResetAll"),hasPrediction());gm=initGM();ko={};slog=[];render();}
+function rsaKO(){armUndo(T("toastResetKO"),koCount()>0);ko={};slog=[];render();}
 // KO auto-scorers. `mid` is the KO match id (R1..R16, L1..L8, Q1..Q4, S1..S2, FINAL, 3RD).
 // Each goal/assist record is tagged with mid so single-match reset can clean slog properly.
 function autoScoreKO(ht,at,hs,as,mid){
@@ -1945,7 +2115,7 @@ function applyUpsetCap(ht,at,h,a){
 function rndKO(ht,at){var r=rnd(false,ht,at);return applyUpsetCap(ht,at,r[0],r[1]);}
 function qpKO(id,ht,at,w){var r=rnd(false,ht,at),h=r[0],a=r[1];if(w===ht&&h<=a){var t=a+1;a=h;h=t;}if(w===at&&a<=h){var t=h+1;h=a;a=t;}var cap=applyUpsetCap(ht,at,h,a);h=cap[0];a=cap[1];slog=slog.filter(function(s){return s.mid!==id;});ko[id]={w:w,l:w===ht?at:ht,h:h,a:a};var sc=autoScoreKO(ht,at,h,a,id);for(var i=0;i<sc.length;i++)slog.push(sc[i]);render();}
 function rnKO(id,ht,at){var r=rndKO(ht,at);slog=slog.filter(function(s){return s.mid!==id;});ko[id]={w:r[0]>r[1]?ht:at,l:r[0]>r[1]?at:ht,h:r[0],a:r[1]};var sc=autoScoreKO(ht,at,r[0],r[1],id);for(var i=0;i<sc.length;i++)slog.push(sc[i]);render();}
-function raKO(){if(!allDone())return;var st=getSt(),t3=getT3(st);ko={};slog=[];
+function raKO(){if(!allDone())return;armUndo(T("toastRandKO"),koCount()>0);var st=getSt(),t3=getT3(st);ko={};slog=[];
 assignThirds(t3);
 for(var i=0;i<R32D.length;i++){var m=R32D[i],ht=getS(m.h,st,t3),at=m.a.indexOf("3_")===0?getT3Team(m.a):getS(m.a,st,t3);if(!ht||!at)continue;var r=rndKO(ht,at);ko[m.i]={w:r[0]>r[1]?ht:at,l:r[0]>r[1]?at:ht,h:r[0],a:r[1]};var sc=autoScoreKO(ht,at,r[0],r[1],m.i);for(var j=0;j<sc.length;j++)slog.push(sc[j]);}
 for(var i=0;i<R16P.length;i++){var lid="L"+(i+1),ht=ko[R16P[i][0]]?ko[R16P[i][0]].w:null,at=ko[R16P[i][1]]?ko[R16P[i][1]].w:null;if(!ht||!at)continue;var r=rndKO(ht,at);ko[lid]={w:r[0]>r[1]?ht:at,l:r[0]>r[1]?at:ht,h:r[0],a:r[1]};var sc=autoScoreKO(ht,at,r[0],r[1],lid);for(var j=0;j<sc.length;j++)slog.push(sc[j]);}
@@ -1955,10 +2125,53 @@ var sl1=ko["S1"]?ko["S1"].l:null,sl2=ko["S2"]?ko["S2"].l:null;if(sl1&&sl2){var r
 var sw1=ko["S1"]?ko["S1"].w:null,sw2=ko["S2"]?ko["S2"].w:null;if(sw1&&sw2){var r=rndKO(sw1,sw2);ko["FINAL"]={w:r[0]>r[1]?sw1:sw2,l:r[0]>r[1]?sw2:sw1,h:r[0],a:r[1]};var sc=autoScoreKO(sw1,sw2,r[0],r[1],"FINAL");for(var j=0;j<sc.length;j++)slog.push(sc[j]);}render();checkChampion();}
 
 // ── SCORER MODAL ──
-// Manual scorer picker: clears auto-picked scorers for one side, then opens picker in forced mode (can't close until all goals picked).
+// Manual scorer picker: clears auto-picked scorers for one side, then opens the picker in forced mode
+// (it re-opens after each goal until all are logged). ✕ / Esc / tapping outside cancels and restores
+// the scorers that were there before.
+var pickSession=null; // {gk,mi,key,before}: one side's scorer list as it was before a manual pick started
+var modalToken=0;     // bumped on every open/close so late async callbacks can't resurrect a closed modal
+var modalCancel=null; // what ✕ / Esc / backdrop do for the open modal (null → just close)
 function manualPickGoals(team,phase,gk,mi,side){
-  if(phase==="group"){var key=side==="h"?"hg":"ag";gm[gk][mi][key]=[];}
+  if(phase==="group"){var key=side==="h"?"hg":"ag";pickSession={gk:gk,mi:mi,key:key,before:gm[gk][mi][key].slice()};gm[gk][mi][key]=[];}
   oS(team,phase,gk,mi,side,true);
+}
+// Cancel an unfinished pick: restore the previous scorers — or, if the partial list predates this
+// session (page reloaded mid-pick), auto-fill the missing goals so the stats stay consistent.
+function cancelPick(gk,mi,side){
+  var key=side==="h"?"hg":"ag",m=gm[gk]&&gm[gk][mi];
+  if(m){
+    if(pickSession&&pickSession.gk===gk&&pickSession.mi===mi&&pickSession.key===key)m[key]=pickSession.before;
+    else topUpGoals(gk,mi,side);
+  }
+  pickSession=null;cM();render();
+}
+function topUpGoals(gk,mi,side){
+  var m=gm[gk][mi],key=side==="h"?"hg":"ag",team=side==="h"?m.h:m.a;
+  var goals=parseInt(side==="h"?m.hs:m.as)||0,have=0;
+  for(var i=0;i<m[key].length;i++)if(m[key][i].g>0)have++;
+  var pool=getPlayers(team).filter(function(x){return getPos(x,team)!=="门将";});
+  for(var n=have;n<goals;n++){
+    var sc=weightedPick(pool,team,GOAL_W,3);if(!sc)break;
+    m[key].push({p:sc,t:team,g:1,a:0});
+    if(Math.random()>0.35&&pool.length>1){var asst=weightedPick(getAssistPool(pool,sc),team,ASSIST_W,3);if(asst)m[key].push({p:asst,t:team,g:0,a:1});}
+  }
+}
+function closeModal(){
+  var root=document.getElementById("modal-root");
+  if(!root||!root.firstChild||root.querySelector("[data-busy]"))return; // poster still rendering
+  if(modalCancel){var f=modalCancel;modalCancel=null;f();}else cM();
+}
+document.addEventListener("keydown",function(e){if(e.key==="Escape"||e.key==="Esc")closeModal();});
+// Late Wikipedia photos replace the initial-letter placeholders of an open picker.
+function swapAvatar(player,url){
+  var els=document.querySelectorAll("#modal-root [data-ph]");
+  for(var i=0;i<els.length;i++){
+    if(els[i].getAttribute("data-ph")!==player)continue;
+    var img=document.createElement("img");img.src=url;img.alt="";
+    img.style.cssText="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #e0e0e8";
+    img.onerror=function(){this.style.display="none";};
+    els[i].parentNode.replaceChild(img,els[i]);
+  }
 }
 function oS(team,phase,gk,mi,side,force){
   // Check goal limit
@@ -1984,28 +2197,38 @@ function oS(team,phase,gk,mi,side,force){
     }
     if(!detail)detail='<p style="color:var(--ink-light);text-align:center">'+T("noDetail")+'</p>';
     var manualBtn=maxGoals>0?'<button onclick="manualPickGoals(\''+team+'\',\''+phase+'\',\''+gk+'\','+mi+',\''+side+'\')" style="margin-top:14px;width:100%;padding:10px;border-radius:10px;border:1px solid var(--line-delicate);background:var(--bg-soft);color:var(--ink-dark);font-weight:600;cursor:pointer;font-family:inherit">'+T("pickManually")+'</button>':'';
-    mr.innerHTML='<div class="modal-bg" onclick="cM()"><div class="modal" onclick="event.stopPropagation()"><h3>'+fi(team)+' '+tn(team)+' <button onclick="cM()">✕</button></h3><p style="color:var(--accent-success);font-weight:600;margin-bottom:10px">'+T("goalsAllLogged")+' ('+maxGoals+')</p>'+detail+manualBtn+'</div></div>';
+    modalToken++;modalCancel=null;
+    mr.innerHTML='<div class="modal-bg" onclick="closeModal()"><div class="modal" role="dialog" aria-modal="true" onclick="event.stopPropagation()"><h3><span class="mt">'+fi(team)+' '+tn(team)+'</span><button onclick="closeModal()" aria-label="'+T("btnCloseModal")+'">✕</button></h3><p style="color:var(--accent-success);font-weight:600;margin-bottom:10px">'+T("goalsAllLogged")+' ('+maxGoals+')</p>'+detail+manualBtn+'</div></div>';
     return;
   }
-  // Picker view — if force=true, no close button and backdrop click disabled
+  // Picker view. In forced mode (a manual pick in progress) ✕ / Esc / tapping outside cancels the
+  // pick and restores the previous scorers instead of trapping the user until every goal is chosen.
   var mr=document.getElementById("modal-root");
+  var token=++modalToken;
+  modalCancel=(force&&phase==="group")?function(){cancelPick(gk,mi,side);}:null;
+  var head='<h3><span class="mt">'+fi(team)+' '+tn(team)+'</span><button onclick="closeModal()" aria-label="'+T(modalCancel?"btnCancel":"btnCloseModal")+'" title="'+T(modalCancel?"btnCancel":"btnCloseModal")+'">✕</button></h3>';
   // Skeleton grid — 11 circular shimmer placeholders matching the actual roster grid layout.
   var skelGrid='';
   for(var __i=0;__i<11;__i++)skelGrid+='<div class="skel-grid-item"><div class="skel skel-circle"></div><div class="skel skel-bar-sm"></div></div>';
-  mr.innerHTML='<div class="modal-bg"><div class="modal"><h3>'+fi(team)+' '+tn(team)+'</h3><p style="text-align:center;color:var(--ink-light);font-size:12px;margin:4px 0 6px">'+T("loadingPhotos")+'</p><div class="skel-grid">'+skelGrid+'</div></div></div>';
-  loadPhotos(team,function(){var ps=uniquePlayers(getPlayers(team));
+  mr.innerHTML='<div class="modal-bg" onclick="closeModal()"><div class="modal" role="dialog" aria-modal="true" onclick="event.stopPropagation()">'+head+'<p style="text-align:center;color:var(--ink-light);font-size:12px;margin:4px 0 6px">'+T("loadingPhotos")+'</p><div class="skel-grid">'+skelGrid+'</div></div></div>';
+  var shown=false;
+  function showGrid(){
+  if(shown||token!==modalToken)return;shown=true;
+  var ps=uniquePlayers(getPlayers(team));
   var remainInfo=phase==="group"?'<p style="color:var(--accent-purple);font-weight:600;margin-bottom:8px">'+T("goalsRemain",{rem:(maxGoals-recorded),total:maxGoals})+'</p>':"";
   var forceHint=force?'<p style="color:var(--ink-light);font-size:11px;margin-bottom:8px">'+T("mustFinishHint")+'</p>':"";
-  var bgOnClick=force?"":'onclick="cM()"';
-  var closeBtn=force?"":'<button onclick="cM()">✕</button>';
   var fStr=force?"true":"false";
-  var h='<div class="modal-bg" '+bgOnClick+'><div class="modal" onclick="event.stopPropagation()"><h3>'+fi(team)+' '+tn(team)+' '+closeBtn+'</h3>'+remainInfo+forceHint+'<p>'+T("selectScorer")+'</p><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">';
+  var h='<div class="modal-bg" onclick="closeModal()"><div class="modal" role="dialog" aria-modal="true" onclick="event.stopPropagation()">'+head+remainInfo+forceHint+'<p>'+T("selectScorer")+'</p><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">';
   for(var i=0;i<ps.length;i++){var photo=getPhotoUrl(ps[i]);
   h+='<button onclick="sS(this,\''+ps[i]+'\',\''+team+'\',\''+phase+'\',\''+gk+'\','+mi+',\''+side+'\','+fStr+')" style="display:flex;flex-direction:column;align-items:center;padding:8px 4px;border-radius:12px;border:2px solid var(--line-delicate);background:var(--bg-input);color:var(--ink-dark);cursor:pointer;font-family:Arial;font-size:10px;gap:4px;font-weight:600;transition:all .15s">';
-  if(photo)h+='<img src="'+photo+'" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #e0e0e8" onerror="this.style.display=\'none\'">';
-  else h+='<div style="width:44px;height:44px;border-radius:50%;background:var(--bg-soft);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--ink-light);font-weight:700">'+ps[i].charAt(0)+'</div>';
+  if(photo)h+='<img src="'+escHtml(photo)+'" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #e0e0e8" onerror="this.style.display=\'none\'">';
+  else h+='<div data-ph="'+escHtml(ps[i])+'" style="width:44px;height:44px;border-radius:50%;background:var(--bg-soft);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--ink-light);font-weight:700">'+ps[i].charAt(0)+'</div>';
   h+='<span>'+pn(ps[i],team)+'</span></button>';}
-  h+='</div><div id="aa"></div></div></div>';mr.innerHTML=h;});}
+  h+='</div><div id="aa"></div></div></div>';mr.innerHTML=h;}
+  // Never hold the picker hostage to Wikipedia (blocked or slow in some regions): show the grid after
+  // at most ~1.2s with initials, then swap real photos in as they arrive.
+  setTimeout(showGrid,1200);
+  loadPhotos(team,showGrid,function(player,url){if(shown&&token===modalToken&&url)swapAvatar(player,url);});}
 function sS(btn,player,team,phase,gk,mi,side,force){
 var btns=document.querySelectorAll(".modal button[onclick*='sS(']");for(var i=0;i<btns.length;i++)btns[i].style.borderColor="var(--line-delicate)";
 btn.style.borderColor="var(--accent-purple)";btn.style.background="var(--row-gold-bg)";
@@ -2016,7 +2239,7 @@ h+='<button onclick="aG(\''+player+'\',\''+team+'\',\''+phase+'\',\''+gk+'\','+m
 for(var i=0;i<ps.length;i++){if(playMode!=="clone"&&ps[i]===player)continue;var photo=getPhotoUrl(ps[i]);
 h+='<button onclick="aG(\''+player+'\',\''+team+'\',\''+phase+'\',\''+gk+'\','+mi+',\''+side+'\',\''+ps[i]+'\','+fStr+')" style="display:flex;flex-direction:column;align-items:center;padding:8px 4px;border-radius:12px;border:2px solid var(--line-delicate);background:var(--bg-input);color:var(--ink-dark);cursor:pointer;font-family:Arial;font-size:10px;gap:4px;font-weight:600">';
 if(photo)h+='<img src="'+photo+'" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #e0e0e8" onerror="this.style.display=\'none\'">';
-else h+='<div style="width:44px;height:44px;border-radius:50%;background:var(--bg-soft);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--ink-light);font-weight:700">'+ps[i].charAt(0)+'</div>';
+else h+='<div data-ph="'+escHtml(ps[i])+'" style="width:44px;height:44px;border-radius:50%;background:var(--bg-soft);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--ink-light);font-weight:700">'+ps[i].charAt(0)+'</div>';
 h+='<span>'+pn(ps[i],team)+'</span></button>';}
 h+='</div>';document.getElementById("aa").innerHTML=h;}
 function aG(player,team,phase,gk,mi,side,assist,force){
@@ -2029,9 +2252,9 @@ function aG(player,team,phase,gk,mi,side,assist,force){
     var rec=0;for(var i=0;i<arr2.length;i++)if(arr2[i].g>0)rec++;
     if(rec<maxGoals){saveState();oS(team,phase,gk,mi,side,true);return;}
   }
-  cM();render();
+  pickSession=null;cM();render();
 }
-function cM(){document.getElementById("modal-root").innerHTML="";}
+function cM(){modalToken++;modalCancel=null;document.getElementById("modal-root").innerHTML="";}
 
 document.addEventListener("DOMContentLoaded",function(){render();fetchActualResults();});
 if(document.readyState!=="loading"){render();fetchActualResults();}
@@ -2041,7 +2264,9 @@ if(document.readyState!=="loading"){render();fetchActualResults();}
 // ── CHAMPION CONFETTI ──
 // lastCelebratedChamp is declared earlier (before loadState) so reloads don't re-fire confetti.
 function fireChampionConfetti(){
-  if(typeof confetti==="undefined")return;
+  loadLib("confetti").then(fireConfettiNow,function(){/* offline: the gold path reveal still plays */});
+}
+function fireConfettiNow(){
   var count=300;
   var defaults={origin:{y:1},zIndex:9999,colors:["#FFD700","#F9A825","#FFFFFF","#DC2626","#059669","#2563EB"]};
   function fire(ratio,opts){confetti(Object.assign({},defaults,opts,{particleCount:Math.floor(count*ratio)}));}
@@ -2121,6 +2346,7 @@ function checkChampion(){
     if(ko["FINAL"].w!==lastCelebratedChamp){
       lastCelebratedChamp=ko["FINAL"].w;
       revealChampionPath();
+      loadLib("confetti").catch(function(){}); // warm up during the 1s path reveal
       setTimeout(fireChampionConfetti,1000);
       saveToHistory();
     }
@@ -2297,7 +2523,7 @@ function getPosterChampionPath(champ){
   }
   return path;
 }
-function escHtml(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function escHtml(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
 // Estimate visual width in CJK-character units (CJK ≈ 1 unit, ASCII ≈ 0.85).
 // 0.85 over-estimates ASCII on purpose: bold uppercase Latin (esp. M/W, and the
 // system-font fallback used in the poster) renders ~0.77/char, so 0.85 leaves a
@@ -2328,7 +2554,7 @@ function buildPosterHTML(champ){
   var qrHTML="";
   try{qrHTML=makeQRHTML(url);}catch(e){qrHTML='<div class="qr-grid"></div>';}
   var topTag=en?"2026 FIFA WORLD CUP · MY PICK":"2026 FIFA WORLD CUP · 我的预测";
-  var topTitle=en?"United · Mexico · Canada":"美加墨世界杯";
+  var topTitle=en?"USA · Mexico · Canada":"美加墨世界杯";
   var footerNotice=en?"Scan to make yours":"扫码生成你的预测";
   var h='<div class="poster">';
   h+='<div class="poster-top">';
@@ -2398,11 +2624,12 @@ function buildPosterHTML(champ){
     '<div class="skel on-dark" style="height:9px;width:100%;margin-bottom:18px"></div>'+
     '<div class="skel on-dark" style="height:12px;width:70%;margin:0 auto"></div>'+
     '</div>';
-  mr.innerHTML='<div class="modal-bg"><div class="modal" style="text-align:center;padding:24px;max-width:340px"><p style="font-size:16px;font-weight:700;margin-bottom:6px">'+T("sharingTitle")+'</p><p style="color:var(--ink-light,#999);font-size:12px;margin-bottom:18px">'+T("sharingDesc")+'</p>'+posterSkel+'</div></div>';
-  if(typeof html2canvas==="undefined"){
+  mr.innerHTML='<div class="modal-bg"><div class="modal" data-busy="1" style="text-align:center;padding:24px;max-width:340px"><p style="font-size:16px;font-weight:700;margin-bottom:6px">'+T("sharingTitle")+'</p><p style="color:var(--ink-light,#999);font-size:12px;margin-bottom:18px">'+T("sharingDesc")+'</p>'+posterSkel+'</div></div>';
+  loadLib("html2canvas").then(function(){buildPosterCanvas(champ,mr);},function(){
     mr.innerHTML='<div class="modal-bg" onclick="cM()"><div class="modal" style="text-align:center;padding:40px" onclick="event.stopPropagation()"><p style="color:red">'+T("shareLibFail")+'</p><button class="b" onclick="cM()" style="margin-top:16px">'+T("btnCloseModal")+'</button></div></div>';
-    return;
-  }
+  });
+}
+function buildPosterCanvas(champ,mr){
   // Build off-screen 540×810 poster DOM. html2canvas scale:2 → 1080×1620 PNG.
   // position:fixed + left:-99999px keeps it rendered but invisible; display:none would make
   // the canvas blank (html2canvas can't capture undisplayed elements).
@@ -2422,7 +2649,8 @@ function buildPosterHTML(champ){
     }).then(function(canvas){
       document.body.removeChild(wrap);
       var imgUrl=canvas.toDataURL("image/png");
-      mr.innerHTML='<div class="modal-bg" onclick="cM()"><div class="modal" onclick="event.stopPropagation()" style="max-width:520px;text-align:center;padding:24px"><h3 style="margin:0 0 12px">'+T("posterModalTitle")+' <button onclick="cM()">✕</button></h3><div style="overflow:auto;max-height:60vh;border-radius:12px;border:1px solid var(--line-delicate)"><img src="'+imgUrl+'" style="width:100%;display:block"></div><div style="margin-top:16px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><a href="'+imgUrl+'" download="worldcup2026-prediction.png" style="padding:11px 20px;background:var(--ink-dark);color:var(--bg-card);border-radius:100px;text-decoration:none;font-weight:700;font-size:13px">'+T("btnDownloadPoster")+'</a><button id="copyShareLinkBtn" onclick="copyShareLink()" style="padding:11px 20px;background:#E5C26A;color:#07110C;border:none;border-radius:100px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit">'+T("btnCopyLink")+'</button><button class="b" onclick="cM()">'+T("btnCloseModal")+'</button></div></div></div>';
+      var touch=window.matchMedia&&window.matchMedia("(hover: none)").matches;
+      mr.innerHTML='<div class="modal-bg" onclick="cM()"><div class="modal" role="dialog" aria-modal="true" onclick="event.stopPropagation()" style="max-width:520px;text-align:center;padding:24px"><h3 style="margin:0 0 12px">'+T("posterModalTitle")+' <button onclick="cM()" aria-label="'+T("btnCloseModal")+'">✕</button></h3><div style="overflow:auto;max-height:60vh;border-radius:12px;border:1px solid var(--line-delicate)"><img src="'+imgUrl+'" style="width:100%;display:block" alt="'+T("posterModalTitle")+'"></div>'+(touch?'<p style="margin:10px 0 0;font-size:12px;color:var(--ink-medium);text-align:center">'+T("posterHintTouch")+'</p>':'')+'<div style="margin-top:16px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><a href="'+imgUrl+'" download="worldcup2026-prediction.png" style="padding:11px 20px;background:var(--ink-dark);color:var(--bg-card);border-radius:100px;text-decoration:none;font-weight:700;font-size:13px">'+T("btnDownloadPoster")+'</a><button id="copyShareLinkBtn" onclick="copyShareLink()" style="padding:11px 20px;background:#E5C26A;color:#07110C;border:none;border-radius:100px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit">'+T("btnCopyLink")+'</button><button class="b" onclick="cM()">'+T("btnCloseModal")+'</button></div></div></div>';
     }).catch(function(e){
       if(wrap.parentNode)wrap.parentNode.removeChild(wrap);
       mr.innerHTML='<div class="modal-bg" onclick="cM()"><div class="modal" style="text-align:center;padding:40px" onclick="event.stopPropagation()"><p style="color:red">'+T("shareGenFail")+e.message+'</p><button class="b" onclick="cM()" style="margin-top:16px">'+T("btnCloseModal")+'</button></div></div>';
@@ -2431,8 +2659,13 @@ function buildPosterHTML(champ){
 }
 
 // ── MUSIC PLAYLIST ──
+// Two sources, in this order:
+//   1. assets/music-1..4.mp3 — for people running their own copy (git-ignored; never committed: copyright).
+//   2. The visitor's own files — picked with a file chooser and played locally via object URLs, never
+//      uploaded. This is what visitors of the public site get, since it ships no audio.
 var playlist=["assets/music-1.mp3","assets/music-2.mp3","assets/music-3.mp3","assets/music-4.mp3"];
-var songNames=["Track 1","Track 2","Track 3","Track 4"];
+var userTracks=[];        // object URLs of the visitor's own files
+var bundledMissing=false; // assets/ had no playable track — stop asking for it
 var currentSong=0;
 var musicPlaying=false;
 function loadSong(idx){
@@ -2447,20 +2680,50 @@ function playCurrent(){
   var btn=document.getElementById("musicBtn");
   if(!audio||!btn)return;
   if(!audio.src||audio.src==="")loadSong(currentSong);
-  audio.play().then(function(){btn.className="ctrl-icon music playing";musicPlaying=true;}).catch(function(){
-    // Audio file missing — repo ships without bundled tracks (copyright). User adds local mp3s to assets/.
+  var started=audio.play();
+  (started&&started.then?started:Promise.resolve()).then(function(){btn.className="ctrl-icon music playing";musicPlaying=true;}).catch(function(err){
     musicPlaying=false;btn.className="ctrl-icon music";
-    showToast(LANG==="en"?"Add MP3 files to assets/ to enable music":"把 MP3 放进 assets/ 文件夹即可开启音乐");
+    if(userTracks.length){
+      // Their own file: either the browser wants one more tap (autoplay rules) or it can't decode it.
+      showToast(err&&err.name==="NotAllowedError"?T("musicTapPlay",{n:userTracks.length}):T("musicCantPlay"));
+      return;
+    }
+    bundledMissing=true; // no assets/ tracks here (the public site ships none) → offer their own music
+    offerMusicPicker();
   });
+}
+function offerMusicPicker(){showToast(T("musicPick"),{action:T("musicPickAction"),duration:6000,onAction:pickMusicFiles});}
+function pickMusicFiles(){
+  var inp=document.getElementById("musicFile");
+  if(!inp){
+    inp=document.createElement("input");
+    inp.type="file";inp.accept="audio/*";inp.multiple=true;inp.id="musicFile";inp.tabIndex=-1;
+    inp.setAttribute("aria-hidden","true");
+    inp.style.cssText="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0"; // not display:none — iOS won't open those
+    inp.addEventListener("change",function(){
+      var files=inp.files;if(!files||!files.length)return;
+      for(var i=0;i<userTracks.length;i++)URL.revokeObjectURL(userTracks[i]);
+      userTracks=[];for(var j=0;j<files.length;j++)userTracks.push(URL.createObjectURL(files[j]));
+      inp.value="";
+      playlist=userTracks.slice();currentSong=0;loadSong(0);
+      showToast(T("musicAdded",{n:userTracks.length}));
+      playCurrent();
+    });
+    document.body.appendChild(inp);
+  }
+  inp.click();
 }
 function toggleMusic(){
   var audio=document.getElementById("bgMusic");
   var btn=document.getElementById("musicBtn");
   if(!audio||!btn)return;
-  if(musicPlaying){audio.pause();btn.className="ctrl-icon music";musicPlaying=false;}
-  else{if(!audio.src||audio.src===""||audio.src==="about:blank")loadSong(currentSong);playCurrent();}
+  if(musicPlaying){audio.pause();btn.className="ctrl-icon music";musicPlaying=false;return;}
+  if(bundledMissing&&!userTracks.length){pickMusicFiles();return;} // known: nothing bundled → straight to their files
+  if(!audio.src||audio.src===""||audio.src==="about:blank")loadSong(currentSong);
+  playCurrent();
 }
 function skipSong(){
+  if(bundledMissing&&!userTracks.length){offerMusicPicker();return;}
   var audio=document.getElementById("bgMusic");
   var wasPlaying=musicPlaying;
   if(audio){audio.pause();}
@@ -2469,8 +2732,7 @@ function skipSong(){
   if(wasPlaying)playCurrent();
 }
 // Music plays only when the user clicks the music button (toggleMusic). Nothing is fetched on load
-// (preload="none" + no loadSong here) so the public build makes zero 404s, matching assets/README.
-// Just wire up auto-next on song end; the first click lazily loads track 0 via toggleMusic.
+// (preload="none" + no loadSong here). Just wire up auto-next on song end.
 document.addEventListener("DOMContentLoaded",function(){
   var audio=document.getElementById("bgMusic");
   if(audio){audio.addEventListener("ended",function(){currentSong=(currentSong+1)%playlist.length;loadSong(currentSong);playCurrent();});}
