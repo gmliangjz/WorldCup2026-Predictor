@@ -83,7 +83,7 @@ body{font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif
 .card.done .card-h .g-name::after{content:"";display:inline-block;width:18px;height:18px;margin-left:8px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23059669' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");background-size:contain;background-repeat:no-repeat}
 .card.sel{box-shadow:0 0 0 2px var(--ink-dark),var(--shadow-float)}
 .match-inline{padding:0 24px 24px}
-@media(min-width:768px){.match-inline{display:none}}
+@media(min-width:850px){.match-inline{display:none}}
 table{width:100%;border-collapse:collapse;font-size:14px}
 th{color:var(--ink-light);font-size:11px;padding:16px 12px 12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--line-delicate);text-align:left}
 td{padding:14px 12px;border-bottom:1px solid var(--bg-soft)}
@@ -144,7 +144,7 @@ body.dark .t3i.nq{color:var(--ink-medium)}
 .modal h3 button{background:none;border:none;color:var(--ink-light);font-size:24px;cursor:pointer;flex-shrink:0}
 .modal h3 .mt{display:flex;align-items:center;gap:10px;min-width:0}
 .modal p{color:var(--ink-medium);font-size:15px;line-height:1.6;margin:0 0 12px}
-.gg{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px}
+.gg{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:24px}
 .kg{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
 .lb-card{background:var(--bg-card);border-radius:20px;padding:20px;box-shadow:var(--shadow-float)}
 .lb-card h3{margin:0 0 16px;font-size:16px;font-weight:700;color:var(--ink-dark)}
@@ -522,6 +522,34 @@ th{white-space:nowrap}
   .bk-row{gap:6px}
   .bk-row .sc{min-width:16px}
 }
+/* Group standings: compact columns so all 8 fit their card; from 850px the grid wraps to one column
+   until two 330px cards fit beside the match panel (fixed 2 columns used to clip W/D/L/GD/Pts). */
+.gg table th,.gg table td{padding-left:6px;padding-right:6px}
+@media(min-width:850px){.gg{grid-template-columns:repeat(auto-fit,minmax(min(330px,100%),1fr))}}
+/* Toast: sized to its text (left:50% used to cap it at half the screen), sits above the page but below
+   modals (no Undo under an open picker), and once hidden it is out of the tab order. */
+.toast{width:max-content;max-width:calc(100vw - 32px);border-radius:18px;line-height:1.4;visibility:hidden;transition:opacity 0.18s ease,transform 0.18s ease,visibility 0s linear 0.18s}
+.toast.show{visibility:visible;transition:opacity 0.18s ease,transform 0.18s ease,visibility 0s}
+.modal-bg{z-index:1300}
+/* Bracket on phones/tablets (it scrolls sideways here): rounds wide enough for full names. */
+@media(min-width:401px) and (max-width:768px){
+  .bk-round{min-width:128px}
+  .bk-round.final-col{min-width:150px}
+  .bk-m{padding:7px 8px}
+  .bk-row{gap:6px}
+  .bk-row .sc{min-width:16px}
+}
+@media(max-width:400px){.bk-row{gap:6px}}
+@media(max-width:1365px){.bk-title{letter-spacing:0.3px}}
+@media(min-width:769px) and (max-width:1365px){
+  .bk-round{min-width:112px}
+  .bk-row{gap:5px}
+  .bk-row img{width:13px;height:13px}
+}
+.bk-act{gap:4px}
+.bk-act button{padding:3px 6px}
+.bk-act button img{width:14px;height:14px}
+.bk-act .bkw{max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* Champion-path highlight bleeds into the card padding instead of eating name space. */
 .bk-row.is-cp{margin:-1px -4px;padding:3px 4px}
 @media(min-width:1600px){
@@ -536,7 +564,6 @@ th{white-space:nowrap}
 </head>
 <body>
 <script>/* Apply the saved / OS theme before anything paints — no light flash for dark-mode users. */(function(){try{var t=localStorage.getItem("wc26_theme")||(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");if(t==="dark")document.body.classList.add("dark");var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",t==="dark"?"#07110C":"#F8F9FA");}catch(e){}})();</script>
-<div id="viewBanner"></div>
 <div class="hdr">
   <h1>
     <svg class="logo" width="44" height="44" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-label="World Cup 2026"><circle cx="32" cy="32" r="30" fill="#07110C"/><circle cx="32" cy="32" r="29" fill="none" stroke="#E5C26A" stroke-width="1.5"/><circle cx="32" cy="20" r="6.5" fill="#E5C26A"/><ellipse cx="29.5" cy="17.8" rx="2.2" ry="1.5" fill="#F0CC7E" opacity="0.65"/><path d="M27 27 Q22.5 32 25 38 L28.5 42 L35.5 42 L39 38 Q41.5 32 37 27 Z" fill="#E5C26A"/><rect x="24" y="44" width="16" height="3" rx="0.6" fill="#E5C26A"/><rect x="22" y="48" width="20" height="3" rx="0.6" fill="#E5C26A"/><text x="32" y="59" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="5.5" font-weight="800" fill="#E5C26A" letter-spacing="0.4">2026</text></svg>
@@ -544,6 +571,7 @@ th{white-space:nowrap}
   </h1>
   <div class="sub" id="hostsLine"></div>
 </div>
+<div id="viewBanner"></div>
 <div class="tabs" id="tabs"></div>
 <div class="main" id="app"></div><div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div id="modal-root"></div>
@@ -832,15 +860,19 @@ function loadLib(name){
   if(typeof window[name]!=="undefined")return Promise.resolve(window[name]);
   if(!libLoading[name])libLoading[name]=new Promise(function(resolve,reject){
     var el=document.createElement("script");el.src=LIB_SRC[name];el.async=true;
-    el.onload=function(){if(typeof window[name]!=="undefined")resolve(window[name]);else{delete libLoading[name];reject(new Error(name+" missing"));}};
-    el.onerror=function(){delete libLoading[name];if(el.parentNode)el.parentNode.removeChild(el);reject(new Error(name+" failed to load"));};
+    function fail(msg){clearTimeout(timer);delete libLoading[name];if(el.parentNode)el.parentNode.removeChild(el);reject(new Error(name+" "+msg));}
+    var timer=setTimeout(function(){fail("timed out");},15000);
+    el.onload=function(){clearTimeout(timer);if(typeof window[name]!=="undefined")resolve(window[name]);else fail("missing");};
+    el.onerror=function(){fail("failed to load");};
     document.head.appendChild(el);
   });
   return libLoading[name];
 }
 var photoCache={};
+// Only plain Wikimedia image URLs may reach an src attribute (the API response is third-party data).
+function safePhotoUrl(u){return(typeof u==="string"&&/^https:\/\/upload\.wikimedia\.org\/[^"'<>\s]+$/.test(u))?u:null;}
 function getPhotoUrl(n){return photoCache[n]!==undefined?photoCache[n]:null;}
-function loadPhotos(team,cb,onEach){var src=getPlayers(team),seen={},ps=[];for(var u=0;u<src.length;u++){if(!seen[src[u]]){seen[src[u]]=1;ps.push(src[u]);}}var ld=0;var tt=ps.length;function done(pn){if(onEach)onEach(pn,photoCache[pn]);ld++;if(ld>=tt&&cb)cb();}for(var i=0;i<ps.length;i++){(function(pn){if(photoCache[pn]!==undefined){ld++;if(ld>=tt&&cb)cb();return;}var en=EN[pn];if(!en){photoCache[pn]=null;ld++;if(ld>=tt&&cb)cb();return;}var x=new XMLHttpRequest();x.open("GET","https://en.wikipedia.org/api/rest_v1/page/summary/"+encodeURIComponent(en),true);x.onload=function(){try{var d=JSON.parse(x.responseText);photoCache[pn]=d.thumbnail?d.thumbnail.source:null;}catch(e){photoCache[pn]=null;}done(pn);};x.onerror=function(){photoCache[pn]=null;done(pn);};x.timeout=5000;x.ontimeout=function(){photoCache[pn]=null;done(pn);};x.send();})(ps[i]);}if(tt===0&&cb)cb();}
+function loadPhotos(team,cb,onEach){var src=getPlayers(team),seen={},ps=[];for(var u=0;u<src.length;u++){if(!seen[src[u]]){seen[src[u]]=1;ps.push(src[u]);}}var ld=0;var tt=ps.length;function done(pn){if(onEach)onEach(pn,photoCache[pn]);ld++;if(ld>=tt&&cb)cb();}for(var i=0;i<ps.length;i++){(function(pn){if(photoCache[pn]!==undefined){ld++;if(ld>=tt&&cb)cb();return;}var en=EN[pn];if(!en){photoCache[pn]=null;ld++;if(ld>=tt&&cb)cb();return;}var x=new XMLHttpRequest();x.open("GET","https://en.wikipedia.org/api/rest_v1/page/summary/"+encodeURIComponent(en),true);x.onload=function(){try{var d=JSON.parse(x.responseText);photoCache[pn]=safePhotoUrl(d.thumbnail&&d.thumbnail.source);}catch(e){photoCache[pn]=null;}done(pn);};x.onerror=function(){photoCache[pn]=null;done(pn);};x.timeout=5000;x.ontimeout=function(){photoCache[pn]=null;done(pn);};x.send();})(ps[i]);}if(tt===0&&cb)cb();}
 
 var R32D=[{i:"R1",h:"2A",a:"2B"},{i:"R2",h:"1E",a:"3_ABCDF"},{i:"R3",h:"1F",a:"2C"},{i:"R4",h:"1C",a:"2F"},{i:"R5",h:"1I",a:"3_CDFGH"},{i:"R6",h:"2E",a:"2I"},{i:"R7",h:"1A",a:"3_CEFHI"},{i:"R8",h:"1L",a:"3_EHIJK"},{i:"R9",h:"1D",a:"3_BEFIJ"},{i:"R10",h:"1G",a:"3_AEHIJ"},{i:"R11",h:"2K",a:"2L"},{i:"R12",h:"1H",a:"2J"},{i:"R13",h:"1B",a:"3_EFGIJ"},{i:"R14",h:"1J",a:"2H"},{i:"R15",h:"1K",a:"3_DEIJL"},{i:"R16",h:"2D",a:"2G"}];
 var R16P=[["R2","R5"],["R1","R3"],["R4","R6"],["R7","R8"],["R11","R12"],["R9","R10"],["R14","R16"],["R13","R15"]];
@@ -927,19 +959,20 @@ function serializeState(){
 // coerced here into a known-safe shape before it can reach the DOM: scores → integers 0-99,
 // teams / players → indices into our own tables, knockout ids → whitelist (blocks "__proto__").
 var KO_ID_RE=/^(R([1-9]|1[0-6])|L[1-8]|Q[1-4]|S[12]|FINAL|3RD)$/;
-function shareScore(v){var n=Number(v);return(isFinite(n)&&n>=0)?Math.min(99,Math.floor(n)):0;}
+// Numbers (or short digit strings) only — never Number(obj), which can call attacker-chosen valueOf/toString or recurse.
+function shareScore(v){if(typeof v==="string"&&/^\d{1,3}$/.test(v))v=+v;return(typeof v==="number"&&isFinite(v)&&v>=0)?Math.min(99,Math.floor(v)):0;}
 function shareIdx(v,len){return(typeof v==="number"&&v>=0&&v<len&&v%1===0)?v:-1;}
 function shareList(v){return Array.isArray(v)?v:[];}
 function sharePlayers(out,team,idxs,isGoal){
   var roster=PL[team]||[];idxs=shareList(idxs);
   for(var i=0;i<idxs.length;i++){var pi=shareIdx(idxs[i],roster.length);if(pi>=0)out.push({p:roster[pi],t:team,g:isGoal?1:0,a:isGoal?0:1});}
 }
-function shareSlog(kid,pairs,isGoal,teams){
+function shareSlog(out,kid,pairs,isGoal,teams){
   pairs=shareList(pairs);
   for(var i=0;i<pairs.length;i++){
     var pr=shareList(pairs[i]),ti=shareIdx(pr[0],teams.length);if(ti<0)continue;
     var team=teams[ti],roster=PL[team]||[],pi=shareIdx(pr[1],roster.length);
-    if(pi>=0)slog.push({mid:kid,t:team,p:roster[pi],g:isGoal?1:0,a:isGoal?0:1});
+    if(pi>=0)out.push({mid:kid,t:team,p:roster[pi],g:isGoal?1:0,a:isGoal?0:1});
   }
 }
 function deserializeState(encoded){
@@ -951,16 +984,17 @@ function deserializeState(encoded){
     var data=JSON.parse(json);
     if(!data||data.v!==SHARE_STATE_VERSION)return false;
     var teams=Object.keys(PL),own=Object.prototype.hasOwnProperty;
-    // Restore gm from compact format
-    gm=initGM();
+    // Build into locals and commit only at the very end: a payload that fails half-way must not
+    // leave a half-loaded prediction behind (it would be saved as the visitor's own).
+    var ngm=initGM(),nko={},nslog=[];
     var dg=(data.g&&typeof data.g==="object")?data.g:{};
     for(var grp in dg){
-      if(!own.call(dg,grp)||!own.call(gm,grp))continue;
+      if(!own.call(dg,grp)||!own.call(ngm,grp))continue;
       var arr=shareList(dg[grp]);
-      for(var i=0;i<arr.length&&i<gm[grp].length;i++){
+      for(var i=0;i<arr.length&&i<ngm[grp].length;i++){
         var entry=arr[i];
         if(!Array.isArray(entry))continue; // 0 = unplayed
-        var m=gm[grp][i],hg=[],ag=[];
+        var m=ngm[grp][i],hg=[],ag=[];
         m.hs=String(shareScore(entry[0]));
         m.as=String(shareScore(entry[1]));
         sharePlayers(hg,m.h,entry[2],true);sharePlayers(hg,m.h,entry[3],false);
@@ -969,17 +1003,17 @@ function deserializeState(encoded){
       }
     }
     // Restore ko + slog with proper g/a flags so rScorers can rebuild leaderboards correctly.
-    ko={};slog=[];
     var dk=(data.k&&typeof data.k==="object")?data.k:{};
     for(var kid in dk){
       if(!own.call(dk,kid)||!KO_ID_RE.test(kid))continue;
       var e2=dk[kid];if(!Array.isArray(e2))continue;
       var wIdx=shareIdx(e2[0],teams.length),lIdx=shareIdx(e2[1],teams.length);
       if(wIdx<0||lIdx<0)continue;
-      ko[kid]={w:teams[wIdx],l:teams[lIdx],h:shareScore(e2[2]),a:shareScore(e2[3])};
-      shareSlog(kid,e2[4],true,teams);
-      shareSlog(kid,e2[5],false,teams);
+      nko[kid]={w:teams[wIdx],l:teams[lIdx],h:shareScore(e2[2]),a:shareScore(e2[3])};
+      shareSlog(nslog,kid,e2[4],true,teams);
+      shareSlog(nslog,kid,e2[5],false,teams);
     }
+    gm=ngm;ko=nko;slog=nslog;
     if(ko["FINAL"]&&ko["FINAL"].w)lastCelebratedChamp=ko["FINAL"].w;
     return true;
   }catch(e){console.error("deserializeState failed:",e);return false;}
@@ -1148,12 +1182,17 @@ function fetchActualResults(){
   if(ACTUAL_RESULTS.ready&&ACTUAL_RESULTS.knockout&&ACTUAL_RESULTS.knockout.FINAL){RESULTS_STATE="ok";return;} // cup over, final cached
   if(typeof fetch!=="function"){RESULTS_STATE=ACTUAL_RESULTS.ready?"ok":"error";return;}
   RESULTS_STATE="loading";
-  fetch(RESULTS_API).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json();}).then(function(j){
+  // Give up after 10s: a stalled request must end in "couldn't load + Retry", not an endless spinner.
+  var ctl=typeof AbortController==="function"?new AbortController():null;
+  var timer=setTimeout(function(){if(ctl)ctl.abort();},10000);
+  fetch(RESULTS_API,ctl?{signal:ctl.signal}:{}).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json();}).then(function(j){
+    clearTimeout(timer);
     if(applyEspnResults(j)>0)cacheActualResults();
     RESULTS_STATE=ACTUAL_RESULTS.ready?"ok":"error";
     refreshResultsView();
   }).catch(function(e){
-    RESULTS_STATE=ACTUAL_RESULTS.ready?"ok":"error"; // offline or API moved — a cached copy (if any) is already applied
+    clearTimeout(timer);
+    RESULTS_STATE=ACTUAL_RESULTS.ready?"ok":"error"; // offline, stalled or API moved — a cached copy (if any) is already applied
     refreshResultsView();
   });
 }
@@ -1246,7 +1285,14 @@ function loadFromHistory(idx){
     var hist=JSON.parse(localStorage.getItem("wc26_history")||"[]");
     var entry=hist[idx];
     if(!entry||!entry.e)return;
-    armUndo(T("toastHistoryLoaded"),hasPrediction());
+    if(isViewMode){
+      // Leave the shared view first: the "before" of this load is the visitor's OWN prediction,
+      // never the friend's (which must not become theirs via Undo).
+      isViewMode=false;document.body.classList.remove("view-mode");
+      gm=initGM();ko={};slog=[];lastCelebratedChamp=null;loadOwnState();
+      undoSnap=snapshotPrediction();
+    }
+    armUndo(T("toastHistoryLoaded"),hasPrediction(),"hist"+idx);
     if(deserializeState(entry.e)){
       // Loaded prediction is now the user's current state — leave view mode if active
       isViewMode=false;
@@ -1350,7 +1396,7 @@ function copyShareLink(){
     navigator.clipboard.writeText(url).then(done).catch(fail);
   }else{fail();}
 }
-function clearState(){armUndo(T("toastClearSave"),hasPrediction());localStorage.removeItem("wc26_gm");localStorage.removeItem("wc26_ko");localStorage.removeItem("wc26_slog");localStorage.removeItem("wc26_tab");localStorage.removeItem("wc26_expG");gm=initGM();ko={};slog=[];tab="groups";expG=null;render();}
+function clearState(){armUndo(T("toastClearSave"),hasPrediction(),"clear");localStorage.removeItem("wc26_gm");localStorage.removeItem("wc26_ko");localStorage.removeItem("wc26_slog");localStorage.removeItem("wc26_tab");localStorage.removeItem("wc26_expG");gm=initGM();ko={};slog=[];tab="groups";expG=null;render();}
 var PLAY_MODES=[
   {k:"normal",zh:"普通模式",en:"Normal"},
   {k:"clone", zh:"克隆模式",en:"Clone"},
@@ -1387,7 +1433,7 @@ function setPlayMode(mode){
     }
   }
   // Step 2: persist new mode (the old prediction is cleared below — offer an undo for it)
-  armUndo(T("toastModeSwitched",{mode:modeLabel(mode)}),hasPrediction());
+  armUndo(function(){return T("toastModeSwitched",{mode:modeLabel(playMode)});},hasPrediction()||(undoIsLive()&&liveUndo.kind==="mode"),"mode");
   playMode=mode;
   localStorage.setItem("wc26_play_mode",playMode);
   // Step 3: fresh start — clear the previous mode's prediction so each mode begins clean.
@@ -1426,7 +1472,7 @@ var I18N={
     baselineCompareTitle:"你的预测 vs 作者",baselineSameChamp:"✓ 你和作者押了同一个冠军！英雄所见略同",
     baselineDiffChamp:"你的冠军：{user} · 作者押的是：{base}",baselineFinishKO:"完成你的淘汰赛后可以和作者对比",
     scoreTitle:"赛果评分",scoreWaiting:"赛事 2026 年 6 月 11 日开赛后，这里显示你的预测得分",
-    scoreTotalLabel:"你的预测得分 ",scoreGroupLabel:"小组赛",scoreKnockoutLabel:"淘汰赛晋级",scorePodiumLabel:"冠亚季军",scoreNeedPrediction:"先完成你自己的淘汰赛预测，开赛后这里才会给你打分",scoreLiveInfo:"已收录 {n} / 104 场真实赛果 · 数据源 ESPN · 实时更新",
+    scoreTotalLabel:"你的预测得分 ",scoreGroupLabel:"小组赛",scoreKnockoutLabel:"淘汰赛晋级",scorePodiumLabel:"冠亚季军",scoreNeedPrediction:"先完成你自己的淘汰赛预测，这里就会对照真实赛果给你打分",scoreLiveInfo:"已收录 {n} / 104 场真实赛果 · 数据源 ESPN · 实时更新",
     hintExpandGroup:"💡 点击小组展开，输入比分或一键选胜负",shareNeedKO:"请先完成全部淘汰赛，再生成预测海报。",shareLibFail:"html2canvas 未加载，请检查网络",shareGenFail:"生成失败：",
     ttSkip:"切歌",ttMusic:"播放 / 暂停",ttTheme:"切换主题",ttInfo:"玩法说明",
     histTitle:"我的历史预测",histClear:"清空",histLoad:"点击加载",
@@ -1475,7 +1521,8 @@ var I18N={
     scoreLoading:"正在获取真实赛果…",scoreFailed:"暂时无法获取真实赛果（网络或数据源不可用）",scoreRetry:"重试",
     scoreAllIn:"全部 104 场真实赛果已收录 · 数据源 ESPN",
     musicPick:"选几首你自己的音乐来播放吧",musicPickAction:"选择音乐",musicAdded:"已添加 {n} 首",
-    musicTapPlay:"已添加 {n} 首，点 ▶ 开始播放",musicCantPlay:"这个文件无法播放，已跳过",
+    musicTapPlay:"已添加 {n} 首，点 ▶ 开始播放",musicSkipped:"已跳过一首无法播放的曲目",musicNonePlayable:"这些文件都无法播放",
+    toastRandGroup:"已重新随机{g}",
     btnCancel:"取消",posterHintTouch:"长按图片即可保存到相册"
   },
   en:{
@@ -1487,7 +1534,7 @@ var I18N={
     baselineCompareTitle:"Your prediction vs Author",baselineSameChamp:"✓ You and the author backed the same champion! Great minds.",
     baselineDiffChamp:"Your champion: {user} · Author backed: {base}",baselineFinishKO:"Finish your knockout to compare with the author",
     scoreTitle:"Result scoring",scoreWaiting:"Once the cup kicks off (June 11, 2026), your prediction score shows up here",
-    scoreTotalLabel:"Your score ",scoreGroupLabel:"Group stage",scoreKnockoutLabel:"Knockout advancement",scorePodiumLabel:"Podium",scoreNeedPrediction:"Finish your own knockout prediction first — scoring kicks in once the tournament starts",scoreLiveInfo:"{n} / 104 real results in · via ESPN · live",
+    scoreTotalLabel:"Your score ",scoreGroupLabel:"Group stage",scoreKnockoutLabel:"Knockout advancement",scorePodiumLabel:"Podium",scoreNeedPrediction:"Finish your own knockout prediction first — then it gets scored against the real results",scoreLiveInfo:"{n} / 104 real results in · via ESPN · live",
     hintExpandGroup:"💡 Tap a group to expand — enter scores or pick a winner",shareNeedKO:"Finish the full knockout stage first to generate a poster.",shareLibFail:"html2canvas failed to load — check your network",shareGenFail:"Generation failed: ",
     ttSkip:"Skip track",ttMusic:"Play / Pause",ttTheme:"Toggle theme",ttInfo:"How to play",
     histTitle:"Your history",histClear:"Clear",histLoad:"Click to load",
@@ -1536,13 +1583,15 @@ var I18N={
     scoreLoading:"Fetching real results…",scoreFailed:"Couldn't load real results right now (network or data source unavailable)",scoreRetry:"Retry",
     scoreAllIn:"All 104 real results in · via ESPN",
     musicPick:"Play your own music — pick a few tracks",musicPickAction:"Choose music",musicAdded:"{n} tracks added",
-    musicTapPlay:"{n} tracks added — tap ▶ to play",musicCantPlay:"Couldn't play that file — skipped",
+    musicTapPlay:"{n} tracks added — tap ▶ to play",musicSkipped:"Skipped a track that can't be played",musicNonePlayable:"None of these files can be played",
+    toastRandGroup:"{g} re-randomized",
+    musicAdded_1:"1 track added",musicTapPlay_1:"1 track added — tap ▶ to play",toastKOPruned_1:"1 affected knockout result cleared",
     btnCancel:"Cancel",posterHintTouch:"Long-press the image to save it"
   }
 };
 var TEAM_EN={"墨西哥":"Mexico","南非":"South Africa","韩国":"South Korea","捷克":"Czechia","加拿大":"Canada","波黑":"Bosnia","卡塔尔":"Qatar","瑞士":"Switzerland","巴西":"Brazil","摩洛哥":"Morocco","海地":"Haiti","苏格兰":"Scotland","美国":"USA","巴拉圭":"Paraguay","澳大利亚":"Australia","土耳其":"Türkiye","德国":"Germany","库拉索":"Curaçao","科特迪瓦":"Côte d'Ivoire","厄瓜多尔":"Ecuador","荷兰":"Netherlands","日本":"Japan","瑞典":"Sweden","突尼斯":"Tunisia","比利时":"Belgium","埃及":"Egypt","伊朗":"Iran","新西兰":"New Zealand","西班牙":"Spain","佛得角":"Cape Verde","沙特":"Saudi Arabia","乌拉圭":"Uruguay","法国":"France","伊拉克":"Iraq","塞内加尔":"Senegal","挪威":"Norway","阿根廷":"Argentina","阿尔及利亚":"Algeria","奥地利":"Austria","约旦":"Jordan","葡萄牙":"Portugal","刚果金":"DR Congo","乌兹别克":"Uzbekistan","哥伦比亚":"Colombia","英格兰":"England","克罗地亚":"Croatia","加纳":"Ghana","巴拿马":"Panama"};
 var POS_EN={"中锋":"ST","边锋":"W","前腰":"AM","中前卫":"CM","后腰":"DM","边卫":"FB","中卫":"CB","门将":"GK"};
-function T(key,vars){var s=(I18N[LANG]&&I18N[LANG][key])||(I18N.zh&&I18N.zh[key])||key;if(vars){for(var k in vars)s=s.replace("{"+k+"}",vars[k]);}return s;}
+function T(key,vars){if(vars&&vars.n===1&&I18N[LANG]&&I18N[LANG][key+"_1"])key+="_1";var s=(I18N[LANG]&&I18N[LANG][key])||(I18N.zh&&I18N.zh[key])||key;if(vars){for(var k in vars)s=s.replace("{"+k+"}",vars[k]);}return s;}
 function tn(team){if(LANG==="en"&&TEAM_EN[team])return TEAM_EN[team];return team;}
 function pn(player,team){if(LANG==="en"){if(typeof EN_OVERRIDE!=="undefined"&&team&&EN_OVERRIDE[team]&&EN_OVERRIDE[team][player])return EN_OVERRIDE[team][player];if(typeof EN!=="undefined"&&EN[player])return EN[player];}return player;}
 function pos_t(pos){if(LANG==="en"&&POS_EN[pos])return POS_EN[pos];return pos;}
@@ -1892,6 +1941,8 @@ return h+'</div>';}
 // (full name in the tooltip); Chinese names are already 2–5 characters.
 function bkTeam(t){return(LANG==="en"&&TEAM_ABBR[t])?TEAM_ABBR[t]:tn(t);}
 function winLabel(t){return LANG==="en"?tn(t)+" wins":tn(t)+" 胜";}
+// Flag for the winner-pick buttons; if the image fails it turns into the team's short name.
+function pickFlag(t){var lbl=escHtml(bkTeam(t)),c=FC[t];return c?'<img class="fls" src="https://flagcdn.com/w40/'+c+'.png" alt="'+lbl+'" onerror="this.outerHTML=this.alt">':lbl;}
 function updateBracketHint(){var w=document.querySelector(".bk-wrap"),h=document.querySelector(".bk-hint");if(w&&h)h.hidden=!(w.scrollWidth>w.clientWidth+1);}
 window.addEventListener("resize",updateBracketHint);
 function bkMatch(m,cp){
@@ -1903,7 +1954,7 @@ var h='<div class="bk-m'+(r?" won":"")+(onPath?" on-cp":"")+(onPath&&m.id==="FIN
 h+='<div class="bk-row'+(htCp?" is-cp":"")+'">'+fi(ht,"fls")+' <span class="name'+(r&&r.w===ht?" w":"")+'" title="'+escHtml(tn(ht))+'">'+bkTeam(ht)+'</span>'+(r?'<span class="sc">'+escHtml(r.h)+'</span>':'')+'</div>';
 h+='<div class="bk-vs">vs</div>';
 h+='<div class="bk-row'+(atCp?" is-cp":"")+'">'+fi(at,"fls")+' <span class="name'+(r&&r.w===at?" w":"")+'" title="'+escHtml(tn(at))+'">'+bkTeam(at)+'</span>'+(r?'<span class="sc">'+escHtml(r.a)+'</span>':'')+'</div>';
-if(!r){h+='<div class="bk-act"><button class="bkw" title="'+escHtml(winLabel(ht))+'" aria-label="'+escHtml(winLabel(ht))+'" onclick="qpKO(\''+m.id+'\',\''+ht+'\',\''+at+'\',\''+ht+'\')">'+fi(ht,"fls")+'</button><button class="bkw" title="'+escHtml(winLabel(at))+'" aria-label="'+escHtml(winLabel(at))+'" onclick="qpKO(\''+m.id+'\',\''+ht+'\',\''+at+'\',\''+at+'\')">'+fi(at,"fls")+'</button><button class="bkr" onclick="rnKO(\''+m.id+'\',\''+ht+'\',\''+at+'\')">🎲</button></div>';}
+if(!r){h+='<div class="bk-act"><button class="bkw" title="'+escHtml(winLabel(ht))+'" aria-label="'+escHtml(winLabel(ht))+'" onclick="qpKO(\''+m.id+'\',\''+ht+'\',\''+at+'\',\''+ht+'\')">'+pickFlag(ht)+'</button><button class="bkw" title="'+escHtml(winLabel(at))+'" aria-label="'+escHtml(winLabel(at))+'" onclick="qpKO(\''+m.id+'\',\''+ht+'\',\''+at+'\',\''+at+'\')">'+pickFlag(at)+'</button><button class="bkr" onclick="rnKO(\''+m.id+'\',\''+ht+'\',\''+at+'\')">🎲</button></div>';}
 else{h+='<div class="bk-act"><button class="bkx" onclick="delKO(\''+m.id+'\')">↺</button></div>';}
 return h+'</div>';}
 
@@ -1921,7 +1972,7 @@ h+='</div>';return h;}
 // the photo isn't in cache yet (cache populated by loadPhotos on Stats tab visit).
 function lbPhoto(player){
   var photo=getPhotoUrl(player);
-  if(photo)return '<img src="'+photo+'" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:1.5px solid var(--line-delicate);display:block" onerror="this.outerHTML=\'<div style=&quot;width:32px;height:32px;border-radius:50%;background:var(--bg-soft);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink-light);font-weight:700;border:1.5px solid var(--line-delicate)&quot;>'+player.charAt(0)+'</div>\'">';
+  if(photo)return '<img src="'+escHtml(photo)+'" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:1.5px solid var(--line-delicate);display:block" onerror="this.outerHTML=\'<div style=&quot;width:32px;height:32px;border-radius:50%;background:var(--bg-soft);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink-light);font-weight:700;border:1.5px solid var(--line-delicate)&quot;>'+player.charAt(0)+'</div>\'">';
   return '<div style="width:32px;height:32px;border-radius:50%;background:var(--bg-soft);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink-light);font-weight:700;border:1.5px solid var(--line-delicate)">'+player.charAt(0)+'</div>';
 }
 // Background-load photos for top scorer/assister teams. Re-renders Stats tab once done.
@@ -1953,9 +2004,12 @@ prefetchLbPhotos(goals.concat(assists));}
 
 // ── ACTIONS ──
 var toastTimer=null;
-// showToast(msg[, {action, onAction, duration}]) — an optional action button (e.g. "Undo").
+// showToast(msg[, {action, onAction, duration, undo}]) — an optional action button (e.g. "Undo").
+// A live Undo offer outranks plain messages: those wait (latest one only) until it is gone.
+var toastIsUndo=false,toastQueued=null;
 function showToast(msg,opts){
   var el=document.getElementById("toast");if(!el)return;opts=opts||{};
+  if(toastIsUndo&&el.classList.contains("show")&&!opts.undo){toastQueued=[msg,opts];return;}
   el.innerHTML="";
   var t=document.createElement("span");t.textContent=msg;el.appendChild(t);
   el.classList.toggle("has-act",!!opts.action);
@@ -1964,29 +2018,49 @@ function showToast(msg,opts){
     b.onclick=function(){hideToast();if(opts.onAction)opts.onAction();};
     el.appendChild(b);
   }
+  toastIsUndo=!!opts.undo;
   el.classList.add("show");
   clearTimeout(toastTimer);toastTimer=setTimeout(hideToast,opts.duration||1800);
 }
-function hideToast(){var el=document.getElementById("toast");clearTimeout(toastTimer);if(el)el.classList.remove("show");}
+function hideToast(){
+  var el=document.getElementById("toast");clearTimeout(toastTimer);toastIsUndo=false;
+  if(!el)return;
+  el.classList.remove("show");
+  // Once faded, drop the button: a stale Undo must not stay focusable / clickable.
+  setTimeout(function(){if(!el.classList.contains("show"))el.innerHTML="";},250);
+  if(toastQueued){var q=toastQueued;toastQueued=null;setTimeout(function(){showToast(q[0],q[1]);},260);}
+}
 // ── UNDO ──
 // undoSnap = the prediction as it stood after the previous render, i.e. just before whatever the
 // user did next. Destructive actions arm a message (armUndo); render() then offers "Undo" for it.
 // A render that silently prunes knockout results (an upstream edit changed the bracket) offers it too.
-var undoSnap=null,pendingUndo=null;
+// The SAME action repeated back-to-back with nothing changed in between (a double-click, two quick
+// mode switches) is undone as one step, back to the state before the first of them.
+var undoSnap=null,pendingUndo=null,pendingKind=null,liveUndo=null;
 function koCount(){var n=0;for(var k in ko)if(ko[k])n++;return n;}
 function anyGroupScore(){for(var k in gm)for(var i=0;i<gm[k].length;i++)if(gm[k][i].hs!==""||gm[k][i].as!=="")return true;return false;}
 function hasPrediction(){return anyGroupScore()||koCount()>0;}
 function snapshotPrediction(){return{gm:JSON.stringify(gm),ko:JSON.stringify(ko),slog:JSON.stringify(slog),mode:playMode,tab:tab,expG:expG,champ:lastCelebratedChamp};}
-function armUndo(msg,when){if(when&&!isViewMode)pendingUndo=msg;}
+function samePrediction(a,b){return!!(a&&b&&a.gm===b.gm&&a.ko===b.ko&&a.slog===b.slog&&a.mode===b.mode);}
+function undoIsLive(){return!!(liveUndo&&liveUndo.until>Date.now());}
+// msg may be a function, evaluated when the toast is shown (e.g. the mode actually selected).
+// kind identifies the action, so only a repeat of the same action is merged into one undo step.
+function armUndo(msg,when,kind){if(when&&!isViewMode){pendingUndo=msg;pendingKind=kind||null;}}
 function afterRenderUndo(pruned){
+  var now=snapshotPrediction();
   if(!isViewMode&&undoSnap){
-    if(pendingUndo)offerUndo(pendingUndo,undoSnap);
-    else if(pruned>0)offerUndo(T("toastKOPruned",{n:pruned}),undoSnap);
+    var msg=pendingUndo?(typeof pendingUndo==="function"?pendingUndo():pendingUndo):(pruned>0?T("toastKOPruned",{n:pruned}):null);
+    var repeat=pendingUndo&&pendingKind&&undoIsLive()&&liveUndo.kind===pendingKind&&samePrediction(liveUndo.after,undoSnap);
+    if(msg)offerUndo(msg,repeat?liveUndo.snap:undoSnap,now,pendingUndo?pendingKind:null);
   }
-  pendingUndo=null;undoSnap=snapshotPrediction();
+  pendingUndo=null;pendingKind=null;undoSnap=now;
 }
-function offerUndo(msg,snap){showToast(msg,{action:T("undo"),duration:6000,onAction:function(){restorePrediction(snap);}});}
+function offerUndo(msg,snap,after,kind){
+  liveUndo={snap:snap,after:after,until:Date.now()+6000,kind:kind||null};
+  showToast(msg,{action:T("undo"),duration:6000,undo:true,onAction:function(){liveUndo=null;restorePrediction(snap);}});
+}
 function restorePrediction(snap){
+  pickSession=null;if(document.getElementById("modal-root").firstChild)cM(); // never swap state under an open picker / poster
   gm=JSON.parse(snap.gm);ko=JSON.parse(snap.ko);slog=JSON.parse(snap.slog);tab=snap.tab;expG=snap.expG;
   lastCelebratedChamp=snap.champ; // already celebrated: undo must not replay confetti or re-save history
   if(playMode!==snap.mode){playMode=snap.mode;try{localStorage.setItem("wc26_play_mode",playMode);}catch(e){}}
@@ -2059,13 +2133,13 @@ function autoScore(gk,mi){
 }
 function qpG(gk,mi,res){var m=gm[gk][mi];var r=rnd(true,m.h,m.a),h=r[0],a=r[1];if(res==="h"){if(h<=a)h=a+1+Math.floor(Math.random()*2);}else if(res==="a"){if(a<=h)a=h+1+Math.floor(Math.random()*2);}else a=h;m.hs=String(h);m.as=String(a);autoScore(gk,mi);render();}
 function rmG(gk,mi){var m=gm[gk][mi];var r=rnd(true,m.h,m.a);m.hs=String(r[0]);m.as=String(r[1]);autoScore(gk,mi);render();}
-function rG(gk){for(var i=0;i<gm[gk].length;i++){var m=gm[gk][i];var r=rnd(true,m.h,m.a);m.hs=String(r[0]);m.as=String(r[1]);autoScore(gk,i);}render();}
-function rsG(gk){armUndo(T("toastResetGroup",{g:groupName(gk)}),gm[gk].some(function(m){return m.hs!==""||m.as!=="";}));for(var i=0;i<gm[gk].length;i++){gm[gk][i].hs="";gm[gk][i].as="";gm[gk][i].hg=[];gm[gk][i].ag=[];}render();}
-function raG(){armUndo(T("toastRandAll"),anyGroupScore());for(var k in gm){for(var i=0;i<gm[k].length;i++){var m=gm[k][i];var r=rnd(true,m.h,m.a);m.hs=String(r[0]);m.as=String(r[1]);autoScore(k,i);}};render();}
+function rG(gk){armUndo(T("toastRandGroup",{g:groupName(gk)}),gm[gk].some(function(m){return m.hs!==""||m.as!=="";}),"rG"+gk);for(var i=0;i<gm[gk].length;i++){var m=gm[gk][i];var r=rnd(true,m.h,m.a);m.hs=String(r[0]);m.as=String(r[1]);autoScore(gk,i);}render();}
+function rsG(gk){armUndo(T("toastResetGroup",{g:groupName(gk)}),gm[gk].some(function(m){return m.hs!==""||m.as!=="";}),"rsG"+gk);for(var i=0;i<gm[gk].length;i++){gm[gk][i].hs="";gm[gk][i].as="";gm[gk][i].hg=[];gm[gk][i].ag=[];}render();}
+function raG(){armUndo(T("toastRandAll"),anyGroupScore(),"raG");for(var k in gm){for(var i=0;i<gm[k].length;i++){var m=gm[k][i];var r=rnd(true,m.h,m.a);m.hs=String(r[0]);m.as=String(r[1]);autoScore(k,i);}};render();}
 // Fill ONLY matches that still have empty scores. Keeps user's manual picks intact.
 function raGRemaining(){for(var k in gm){for(var i=0;i<gm[k].length;i++){var m=gm[k][i];if(m.hs===""||m.as===""){var r=rnd(true,m.h,m.a);m.hs=String(r[0]);m.as=String(r[1]);autoScore(k,i);}}}render();}
-function rsaG(){armUndo(T("toastResetAll"),hasPrediction());gm=initGM();ko={};slog=[];render();}
-function rsaKO(){armUndo(T("toastResetKO"),koCount()>0);ko={};slog=[];render();}
+function rsaG(){armUndo(T("toastResetAll"),hasPrediction(),"rsaG");gm=initGM();ko={};slog=[];render();}
+function rsaKO(){armUndo(T("toastResetKO"),koCount()>0,"rsaKO");ko={};slog=[];render();}
 // KO auto-scorers. `mid` is the KO match id (R1..R16, L1..L8, Q1..Q4, S1..S2, FINAL, 3RD).
 // Each goal/assist record is tagged with mid so single-match reset can clean slog properly.
 function autoScoreKO(ht,at,hs,as,mid){
@@ -2115,7 +2189,7 @@ function applyUpsetCap(ht,at,h,a){
 function rndKO(ht,at){var r=rnd(false,ht,at);return applyUpsetCap(ht,at,r[0],r[1]);}
 function qpKO(id,ht,at,w){var r=rnd(false,ht,at),h=r[0],a=r[1];if(w===ht&&h<=a){var t=a+1;a=h;h=t;}if(w===at&&a<=h){var t=h+1;h=a;a=t;}var cap=applyUpsetCap(ht,at,h,a);h=cap[0];a=cap[1];slog=slog.filter(function(s){return s.mid!==id;});ko[id]={w:w,l:w===ht?at:ht,h:h,a:a};var sc=autoScoreKO(ht,at,h,a,id);for(var i=0;i<sc.length;i++)slog.push(sc[i]);render();}
 function rnKO(id,ht,at){var r=rndKO(ht,at);slog=slog.filter(function(s){return s.mid!==id;});ko[id]={w:r[0]>r[1]?ht:at,l:r[0]>r[1]?at:ht,h:r[0],a:r[1]};var sc=autoScoreKO(ht,at,r[0],r[1],id);for(var i=0;i<sc.length;i++)slog.push(sc[i]);render();}
-function raKO(){if(!allDone())return;armUndo(T("toastRandKO"),koCount()>0);var st=getSt(),t3=getT3(st);ko={};slog=[];
+function raKO(){if(!allDone())return;armUndo(T("toastRandKO"),koCount()>0,"raKO");var st=getSt(),t3=getT3(st);ko={};slog=[];
 assignThirds(t3);
 for(var i=0;i<R32D.length;i++){var m=R32D[i],ht=getS(m.h,st,t3),at=m.a.indexOf("3_")===0?getT3Team(m.a):getS(m.a,st,t3);if(!ht||!at)continue;var r=rndKO(ht,at);ko[m.i]={w:r[0]>r[1]?ht:at,l:r[0]>r[1]?at:ht,h:r[0],a:r[1]};var sc=autoScoreKO(ht,at,r[0],r[1],m.i);for(var j=0;j<sc.length;j++)slog.push(sc[j]);}
 for(var i=0;i<R16P.length;i++){var lid="L"+(i+1),ht=ko[R16P[i][0]]?ko[R16P[i][0]].w:null,at=ko[R16P[i][1]]?ko[R16P[i][1]].w:null;if(!ht||!at)continue;var r=rndKO(ht,at);ko[lid]={w:r[0]>r[1]?ht:at,l:r[0]>r[1]?at:ht,h:r[0],a:r[1]};var sc=autoScoreKO(ht,at,r[0],r[1],lid);for(var j=0;j<sc.length;j++)slog.push(sc[j]);}
@@ -2156,9 +2230,12 @@ function topUpGoals(gk,mi,side){
     if(Math.random()>0.35&&pool.length>1){var asst=weightedPick(getAssistPool(pool,sc),team,ASSIST_W,3);if(asst)m[key].push({p:asst,t:team,g:0,a:1});}
   }
 }
+// Backdrop "click" counts only if the press also started on the backdrop — dragging out of the card
+// (e.g. a slightly-missed tap on a player tile) must not cancel a manual pick.
+var BG_CLOSE='onpointerdown="this._down=event.target===this" onclick="if(event.target===this&&this._down)closeModal()"';
 function closeModal(){
   var root=document.getElementById("modal-root");
-  if(!root||!root.firstChild||root.querySelector("[data-busy]"))return; // poster still rendering
+  if(!root||!root.firstChild)return;
   if(modalCancel){var f=modalCancel;modalCancel=null;f();}else cM();
 }
 document.addEventListener("keydown",function(e){if(e.key==="Escape"||e.key==="Esc")closeModal();});
@@ -2198,7 +2275,7 @@ function oS(team,phase,gk,mi,side,force){
     if(!detail)detail='<p style="color:var(--ink-light);text-align:center">'+T("noDetail")+'</p>';
     var manualBtn=maxGoals>0?'<button onclick="manualPickGoals(\''+team+'\',\''+phase+'\',\''+gk+'\','+mi+',\''+side+'\')" style="margin-top:14px;width:100%;padding:10px;border-radius:10px;border:1px solid var(--line-delicate);background:var(--bg-soft);color:var(--ink-dark);font-weight:600;cursor:pointer;font-family:inherit">'+T("pickManually")+'</button>':'';
     modalToken++;modalCancel=null;
-    mr.innerHTML='<div class="modal-bg" onclick="closeModal()"><div class="modal" role="dialog" aria-modal="true" onclick="event.stopPropagation()"><h3><span class="mt">'+fi(team)+' '+tn(team)+'</span><button onclick="closeModal()" aria-label="'+T("btnCloseModal")+'">✕</button></h3><p style="color:var(--accent-success);font-weight:600;margin-bottom:10px">'+T("goalsAllLogged")+' ('+maxGoals+')</p>'+detail+manualBtn+'</div></div>';
+    mr.innerHTML='<div class="modal-bg" '+BG_CLOSE+'><div class="modal" role="dialog" aria-modal="true" onclick="event.stopPropagation()"><h3><span class="mt">'+fi(team)+' '+tn(team)+'</span><button onclick="closeModal()" aria-label="'+T("btnCloseModal")+'">✕</button></h3><p style="color:var(--accent-success);font-weight:600;margin-bottom:10px">'+T("goalsAllLogged")+' ('+maxGoals+')</p>'+detail+manualBtn+'</div></div>';
     return;
   }
   // Picker view. In forced mode (a manual pick in progress) ✕ / Esc / tapping outside cancels the
@@ -2210,7 +2287,7 @@ function oS(team,phase,gk,mi,side,force){
   // Skeleton grid — 11 circular shimmer placeholders matching the actual roster grid layout.
   var skelGrid='';
   for(var __i=0;__i<11;__i++)skelGrid+='<div class="skel-grid-item"><div class="skel skel-circle"></div><div class="skel skel-bar-sm"></div></div>';
-  mr.innerHTML='<div class="modal-bg" onclick="closeModal()"><div class="modal" role="dialog" aria-modal="true" onclick="event.stopPropagation()">'+head+'<p style="text-align:center;color:var(--ink-light);font-size:12px;margin:4px 0 6px">'+T("loadingPhotos")+'</p><div class="skel-grid">'+skelGrid+'</div></div></div>';
+  mr.innerHTML='<div class="modal-bg" '+BG_CLOSE+'><div class="modal" role="dialog" aria-modal="true" onclick="event.stopPropagation()">'+head+'<p style="text-align:center;color:var(--ink-light);font-size:12px;margin:4px 0 6px">'+T("loadingPhotos")+'</p><div class="skel-grid">'+skelGrid+'</div></div></div>';
   var shown=false;
   function showGrid(){
   if(shown||token!==modalToken)return;shown=true;
@@ -2218,7 +2295,7 @@ function oS(team,phase,gk,mi,side,force){
   var remainInfo=phase==="group"?'<p style="color:var(--accent-purple);font-weight:600;margin-bottom:8px">'+T("goalsRemain",{rem:(maxGoals-recorded),total:maxGoals})+'</p>':"";
   var forceHint=force?'<p style="color:var(--ink-light);font-size:11px;margin-bottom:8px">'+T("mustFinishHint")+'</p>':"";
   var fStr=force?"true":"false";
-  var h='<div class="modal-bg" onclick="closeModal()"><div class="modal" role="dialog" aria-modal="true" onclick="event.stopPropagation()">'+head+remainInfo+forceHint+'<p>'+T("selectScorer")+'</p><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">';
+  var h='<div class="modal-bg" '+BG_CLOSE+'><div class="modal" role="dialog" aria-modal="true" onclick="event.stopPropagation()">'+head+remainInfo+forceHint+'<p>'+T("selectScorer")+'</p><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">';
   for(var i=0;i<ps.length;i++){var photo=getPhotoUrl(ps[i]);
   h+='<button onclick="sS(this,\''+ps[i]+'\',\''+team+'\',\''+phase+'\',\''+gk+'\','+mi+',\''+side+'\','+fStr+')" style="display:flex;flex-direction:column;align-items:center;padding:8px 4px;border-radius:12px;border:2px solid var(--line-delicate);background:var(--bg-input);color:var(--ink-dark);cursor:pointer;font-family:Arial;font-size:10px;gap:4px;font-weight:600;transition:all .15s">';
   if(photo)h+='<img src="'+escHtml(photo)+'" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #e0e0e8" onerror="this.style.display=\'none\'">';
@@ -2238,7 +2315,7 @@ var h='<p style="margin-top:12px">'+T("selectAssister")+'</p><div style="display
 h+='<button onclick="aG(\''+player+'\',\''+team+'\',\''+phase+'\',\''+gk+'\','+mi+',\''+side+'\',null,'+fStr+')" style="display:flex;flex-direction:column;align-items:center;padding:8px 4px;border-radius:12px;border:2px solid var(--line-delicate);background:var(--bg-card);color:var(--accent-purple);cursor:pointer;font-family:Arial;font-size:10px;gap:4px;font-weight:700"><div style="width:44px;height:44px;border-radius:50%;background:var(--bg-soft);display:flex;align-items:center;justify-content:center;font-size:18px">⏭</div><span>'+T("skipBtn")+'</span></button>';
 for(var i=0;i<ps.length;i++){if(playMode!=="clone"&&ps[i]===player)continue;var photo=getPhotoUrl(ps[i]);
 h+='<button onclick="aG(\''+player+'\',\''+team+'\',\''+phase+'\',\''+gk+'\','+mi+',\''+side+'\',\''+ps[i]+'\','+fStr+')" style="display:flex;flex-direction:column;align-items:center;padding:8px 4px;border-radius:12px;border:2px solid var(--line-delicate);background:var(--bg-input);color:var(--ink-dark);cursor:pointer;font-family:Arial;font-size:10px;gap:4px;font-weight:600">';
-if(photo)h+='<img src="'+photo+'" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #e0e0e8" onerror="this.style.display=\'none\'">';
+if(photo)h+='<img src="'+escHtml(photo)+'" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #e0e0e8" onerror="this.style.display=\'none\'">';
 else h+='<div data-ph="'+escHtml(ps[i])+'" style="width:44px;height:44px;border-radius:50%;background:var(--bg-soft);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--ink-light);font-weight:700">'+ps[i].charAt(0)+'</div>';
 h+='<span>'+pn(ps[i],team)+'</span></button>';}
 h+='</div>';document.getElementById("aa").innerHTML=h;}
@@ -2602,7 +2679,7 @@ function buildPosterHTML(champ){
   // Require completed knockout (FINAL must have a winner)
   var champ=(ko&&ko.FINAL)?ko.FINAL.w:null;
   if(!champ){
-    mr.innerHTML='<div class="modal-bg" onclick="cM()"><div class="modal" style="text-align:center;padding:40px" onclick="event.stopPropagation()"><p>'+T("shareNeedKO")+'</p><button class="b" onclick="cM()" style="margin-top:16px">'+T("btnCloseModal")+'</button></div></div>';
+    mr.innerHTML='<div class="modal-bg" '+BG_CLOSE+'><div class="modal" style="text-align:center;padding:40px" onclick="event.stopPropagation()"><p>'+T("shareNeedKO")+'</p><button class="b" onclick="cM()" style="margin-top:16px">'+T("btnCloseModal")+'</button></div></div>';
     return;
   }
   // Loading state
@@ -2624,12 +2701,15 @@ function buildPosterHTML(champ){
     '<div class="skel on-dark" style="height:9px;width:100%;margin-bottom:18px"></div>'+
     '<div class="skel on-dark" style="height:12px;width:70%;margin:0 auto"></div>'+
     '</div>';
-  mr.innerHTML='<div class="modal-bg"><div class="modal" data-busy="1" style="text-align:center;padding:24px;max-width:340px"><p style="font-size:16px;font-weight:700;margin-bottom:6px">'+T("sharingTitle")+'</p><p style="color:var(--ink-light,#999);font-size:12px;margin-bottom:18px">'+T("sharingDesc")+'</p>'+posterSkel+'</div></div>';
-  loadLib("html2canvas").then(function(){buildPosterCanvas(champ,mr);},function(){
-    mr.innerHTML='<div class="modal-bg" onclick="cM()"><div class="modal" style="text-align:center;padding:40px" onclick="event.stopPropagation()"><p style="color:red">'+T("shareLibFail")+'</p><button class="b" onclick="cM()" style="margin-top:16px">'+T("btnCloseModal")+'</button></div></div>';
+  // ✕ / Esc / backdrop cancel at any point; a late html2canvas load or render is then discarded.
+  var token=++modalToken;modalCancel=null;
+  mr.innerHTML='<div class="modal-bg" '+BG_CLOSE+'><div class="modal" role="dialog" aria-modal="true" style="text-align:center;padding:24px;max-width:340px"><h3 style="margin:0 0 6px;font-size:16px"><span>'+T("sharingTitle")+'</span><button onclick="closeModal()" aria-label="'+T("btnCancel")+'">✕</button></h3><p style="color:var(--ink-light,#999);font-size:12px;margin-bottom:18px">'+T("sharingDesc")+'</p>'+posterSkel+'</div></div>';
+  loadLib("html2canvas").then(function(){if(token===modalToken)buildPosterCanvas(champ,mr,token);},function(){
+    if(token!==modalToken)return;
+    mr.innerHTML='<div class="modal-bg" '+BG_CLOSE+'><div class="modal" style="text-align:center;padding:40px" onclick="event.stopPropagation()"><p style="color:red">'+T("shareLibFail")+'</p><button class="b" onclick="cM()" style="margin-top:16px">'+T("btnCloseModal")+'</button></div></div>';
   });
 }
-function buildPosterCanvas(champ,mr){
+function buildPosterCanvas(champ,mr,token){
   // Build off-screen 540×810 poster DOM. html2canvas scale:2 → 1080×1620 PNG.
   // position:fixed + left:-99999px keeps it rendered but invisible; display:none would make
   // the canvas blank (html2canvas can't capture undisplayed elements).
@@ -2648,12 +2728,14 @@ function buildPosterCanvas(champ,mr){
       height:810
     }).then(function(canvas){
       document.body.removeChild(wrap);
+      if(token!==modalToken)return; // dismissed while rendering
       var imgUrl=canvas.toDataURL("image/png");
       var touch=window.matchMedia&&window.matchMedia("(hover: none)").matches;
-      mr.innerHTML='<div class="modal-bg" onclick="cM()"><div class="modal" role="dialog" aria-modal="true" onclick="event.stopPropagation()" style="max-width:520px;text-align:center;padding:24px"><h3 style="margin:0 0 12px">'+T("posterModalTitle")+' <button onclick="cM()" aria-label="'+T("btnCloseModal")+'">✕</button></h3><div style="overflow:auto;max-height:60vh;border-radius:12px;border:1px solid var(--line-delicate)"><img src="'+imgUrl+'" style="width:100%;display:block" alt="'+T("posterModalTitle")+'"></div>'+(touch?'<p style="margin:10px 0 0;font-size:12px;color:var(--ink-medium);text-align:center">'+T("posterHintTouch")+'</p>':'')+'<div style="margin-top:16px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><a href="'+imgUrl+'" download="worldcup2026-prediction.png" style="padding:11px 20px;background:var(--ink-dark);color:var(--bg-card);border-radius:100px;text-decoration:none;font-weight:700;font-size:13px">'+T("btnDownloadPoster")+'</a><button id="copyShareLinkBtn" onclick="copyShareLink()" style="padding:11px 20px;background:#E5C26A;color:#07110C;border:none;border-radius:100px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit">'+T("btnCopyLink")+'</button><button class="b" onclick="cM()">'+T("btnCloseModal")+'</button></div></div></div>';
+      mr.innerHTML='<div class="modal-bg" '+BG_CLOSE+'><div class="modal" role="dialog" aria-modal="true" onclick="event.stopPropagation()" style="max-width:520px;text-align:center;padding:24px"><h3 style="margin:0 0 12px">'+T("posterModalTitle")+' <button onclick="cM()" aria-label="'+T("btnCloseModal")+'">✕</button></h3><div style="overflow:auto;max-height:60vh;border-radius:12px;border:1px solid var(--line-delicate)"><img src="'+imgUrl+'" style="width:100%;display:block" alt="'+T("posterModalTitle")+'"></div>'+(touch?'<p style="margin:10px 0 0;font-size:12px;color:var(--ink-medium);text-align:center">'+T("posterHintTouch")+'</p>':'')+'<div style="margin-top:16px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><a href="'+imgUrl+'" download="worldcup2026-prediction.png" style="padding:11px 20px;background:var(--ink-dark);color:var(--bg-card);border-radius:100px;text-decoration:none;font-weight:700;font-size:13px">'+T("btnDownloadPoster")+'</a><button id="copyShareLinkBtn" onclick="copyShareLink()" style="padding:11px 20px;background:#E5C26A;color:#07110C;border:none;border-radius:100px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit">'+T("btnCopyLink")+'</button><button class="b" onclick="cM()">'+T("btnCloseModal")+'</button></div></div></div>';
     }).catch(function(e){
       if(wrap.parentNode)wrap.parentNode.removeChild(wrap);
-      mr.innerHTML='<div class="modal-bg" onclick="cM()"><div class="modal" style="text-align:center;padding:40px" onclick="event.stopPropagation()"><p style="color:red">'+T("shareGenFail")+e.message+'</p><button class="b" onclick="cM()" style="margin-top:16px">'+T("btnCloseModal")+'</button></div></div>';
+      if(token!==modalToken)return;
+      mr.innerHTML='<div class="modal-bg" '+BG_CLOSE+'><div class="modal" style="text-align:center;padding:40px" onclick="event.stopPropagation()"><p style="color:red">'+T("shareGenFail")+escHtml(e&&e.message||e)+'</p><button class="b" onclick="cM()" style="margin-top:16px">'+T("btnCloseModal")+'</button></div></div>';
     });
   },200);
 }
@@ -2666,8 +2748,10 @@ function buildPosterCanvas(champ,mr){
 var playlist=["assets/music-1.mp3","assets/music-2.mp3","assets/music-3.mp3","assets/music-4.mp3"];
 var userTracks=[];        // object URLs of the visitor's own files
 var bundledMissing=false; // assets/ had no playable track — stop asking for it
+var bundledPlayed=false;  // a bundled track played this session: later failures are per-track
+var failStreak=0;         // consecutive unplayable tracks (stop after one lap)
 var currentSong=0;
-var musicPlaying=false;
+var musicPlaying=false; // the listener WANTS music: true from the moment play is requested (not only once it starts)
 function loadSong(idx){
   var audio=document.getElementById("bgMusic");
   if(!audio)return;
@@ -2680,16 +2764,20 @@ function playCurrent(){
   var btn=document.getElementById("musicBtn");
   if(!audio||!btn)return;
   if(!audio.src||audio.src==="")loadSong(currentSong);
+  musicPlaying=true; // intent: a ⏭ pressed before the track actually starts must keep playing the next one
   var started=audio.play();
-  (started&&started.then?started:Promise.resolve()).then(function(){btn.className="ctrl-icon music playing";musicPlaying=true;}).catch(function(err){
+  (started&&started.then?started:Promise.resolve()).then(function(){
+    btn.className="ctrl-icon music playing";musicPlaying=true;failStreak=0;
+    if(!userTracks.length)bundledPlayed=true;
+  }).catch(function(err){
+    var name=err&&err.name;
+    if(name==="AbortError")return; // superseded by a newer load()/pause() (e.g. a quick ⏭): not a failure
     musicPlaying=false;btn.className="ctrl-icon music";
-    if(userTracks.length){
-      // Their own file: either the browser wants one more tap (autoplay rules) or it can't decode it.
-      showToast(err&&err.name==="NotAllowedError"?T("musicTapPlay",{n:userTracks.length}):T("musicCantPlay"));
-      return;
-    }
-    bundledMissing=true; // no assets/ tracks here (the public site ships none) → offer their own music
-    offerMusicPicker();
+    if(name==="NotAllowedError"){if(userTracks.length)showToast(T("musicTapPlay",{n:userTracks.length}));return;} // autoplay rules: one more tap
+    if(!userTracks.length&&!bundledPlayed){bundledMissing=true;offerMusicPicker();return;} // nothing bundled (the public site ships none)
+    // This track can't be played (missing / undecodable): move on — at most one lap round the playlist.
+    if(++failStreak<playlist.length){showToast(T("musicSkipped"));currentSong=(currentSong+1)%playlist.length;loadSong(currentSong);playCurrent();return;}
+    failStreak=0;showToast(T("musicNonePlayable"));
   });
 }
 function offerMusicPicker(){showToast(T("musicPick"),{action:T("musicPickAction"),duration:6000,onAction:pickMusicFiles});}
@@ -2705,7 +2793,7 @@ function pickMusicFiles(){
       for(var i=0;i<userTracks.length;i++)URL.revokeObjectURL(userTracks[i]);
       userTracks=[];for(var j=0;j<files.length;j++)userTracks.push(URL.createObjectURL(files[j]));
       inp.value="";
-      playlist=userTracks.slice();currentSong=0;loadSong(0);
+      playlist=userTracks.slice();currentSong=0;failStreak=0;loadSong(0);
       showToast(T("musicAdded",{n:userTracks.length}));
       playCurrent();
     });
